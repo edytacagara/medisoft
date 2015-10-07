@@ -18,7 +18,7 @@ import pl.medisoft.ui.common.BaseFrame;
 public class LoginFrame extends JFrame implements BaseFrame {
 
     private final JFrame parent;
-    
+
     public LoginFrame(final JFrame parent) {
         super(Configuration.TITLE + " " + Configuration.VERSION);
         this.parent = parent;
@@ -61,7 +61,7 @@ public class LoginFrame extends JFrame implements BaseFrame {
             @Override
             public void windowClosing(WindowEvent event) {
                 System.out.println("asss");
-                if(parent != null) {
+                if (parent != null) {
                     dispose();
                     parent.setVisible(true);
                 }
@@ -69,5 +69,5 @@ public class LoginFrame extends JFrame implements BaseFrame {
             }
         });
     }
-    
+
 }

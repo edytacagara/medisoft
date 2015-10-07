@@ -12,8 +12,9 @@ import javax.swing.JFrame;
  * @author Mariusz Batyra
  */
 public interface BaseFrame {
-    
+
     JFrame getParent();
+
     void addWindowListener();
 
 }

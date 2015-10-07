@@ -15,15 +15,11 @@ import pl.medisoft.ui.login.LoginFrame;
  */
 public class Main {
 
-    public static void main(String[] args) {
-        ConfigurationLoader configurationLoader = new ConfigurationLoader();
-        
-        EventQueue.invokeLater(new Runnable() {
+    private static final ConfigurationLoader configurationLoader = new ConfigurationLoader();
 
-            @Override
-            public void run() {
-                final LoginFrame loginFrame = new LoginFrame(null);
-            }
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            final LoginFrame loginFrame = new LoginFrame(null);
         });
     }
 
