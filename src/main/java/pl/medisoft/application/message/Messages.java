@@ -5,6 +5,7 @@
  */
 package pl.medisoft.application.message;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import pl.medisoft.application.common.PropertiesLoader;
 
@@ -13,6 +14,9 @@ import pl.medisoft.application.common.PropertiesLoader;
  * @author Mariusz Batyra
  */
 public class Messages {
+
+    private static final String ENCODING_ISO = "ISO-8859-1";
+    private static final String ENCODING_UTF8 = "UTF-8";
 
     private static Messages instace = null;
     private Properties properties;
@@ -39,6 +43,12 @@ public class Messages {
     public String get(final String key) {
         String value = (String) properties.get(key);
 
-        return (value == null ? key : value);
+        try {
+            value = value == null ? key : value;
+            return new String(value.getBytes(ENCODING_ISO), ENCODING_UTF8);
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+            return key;
+        }
     }
 }
