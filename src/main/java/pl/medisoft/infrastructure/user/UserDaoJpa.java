@@ -14,12 +14,12 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
  */
 public class UserDaoJpa extends BasicDaoJpa implements UserDao {
 
-    private static final String FIND_BY_LOGIN = "select user from User user where user.login = :login";
+    private static final String FIND_BY_PESEL = "select user from User user where user.pesel = :pesel";
 
     @Override
-    public User findByLogin(final String login) {
-        return (User) getEntityManager().createQuery(FIND_BY_LOGIN)
-                .setParameter("login", login).getSingleResult();
+    public User findByPesel(final String pesel) {
+        return (User) getEntityManager().createQuery(FIND_BY_PESEL)
+                .setParameter("pesel", pesel).getSingleResult();
     }
 
 }
