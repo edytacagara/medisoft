@@ -11,7 +11,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import pl.medisoft.application.common.StringsUtils;
 import pl.medisoft.application.configuration.Configuration;
+import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.LanguageEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.ui.common.BaseFrame;
@@ -25,6 +27,7 @@ public class LoginFrame extends JFrame implements BaseFrame {
 
     private final JFrame parent;
     private final Messages messages = Messages.getInstace();
+    private final IdentityProvider identityProvider = new IdentityProvider();
 
     public LoginFrame(final JFrame parent) {
         super(Configuration.TITLE + " " + Configuration.VERSION);
@@ -166,7 +169,7 @@ public class LoginFrame extends JFrame implements BaseFrame {
     private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInButtonActionPerformed
         String username = loginTextField.getText();
         String password = passwordField.getText();
-        // TODO sign in
+        boolean login = identityProvider.login(username, StringsUtils.generateSHA256(password));
     }//GEN-LAST:event_signInButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

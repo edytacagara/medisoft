@@ -11,7 +11,7 @@ package pl.medisoft.domain.identity;
  */
 public class Identity {
 
-    private String username;
+    private String pesel;
     private String name;
     private String surname;
 
@@ -19,8 +19,14 @@ public class Identity {
 
     }
 
-    public String getUsername() {
-        return username;
+    public Identity(String pesel, String name, String surname) {
+        this.pesel = pesel;
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public String getPesel() {
+        return pesel;
     }
 
     public String getName() {
