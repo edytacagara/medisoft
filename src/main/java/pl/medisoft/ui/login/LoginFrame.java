@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import pl.medisoft.application.common.StringsUtils;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.identity.IdentityProvider;
@@ -166,9 +167,12 @@ public class LoginFrame extends BaseFrame {
         String username = loginTextField.getText();
         String password = passwordField.getText();
         boolean login = identityProvider.login(username, StringsUtils.generateSHA256(password));
-        // TODO if login
-        final JFrame frame = new MainFrame(this);
-        frame.setVisible(true);
+        if(login) {
+            final JFrame frame = new MainFrame(this);
+            frame.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, messages.get("login.error"), "!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_signInButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

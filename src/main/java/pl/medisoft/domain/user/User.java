@@ -27,6 +27,7 @@ public class User implements Serializable {
 
     private Long id;
     private String pesel;
+    private String username;
     private String passhash;
     private String name;
     private String surname;
@@ -47,9 +48,9 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Long id, String pesel, String passhash) {
+    public User(Long id, String username, String passhash) {
         this.id = id;
-        this.pesel = pesel;
+        this.username = username;
         this.passhash = passhash;
     }
 
@@ -72,6 +73,15 @@ public class User implements Serializable {
         this.pesel = pesel;
     }
 
+    @Column(name = "USERNAME")
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     @Column(name = "PASSHASH")
     public String getPasshash() {
         return passhash;

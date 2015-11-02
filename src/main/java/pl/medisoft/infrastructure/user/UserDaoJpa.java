@@ -15,8 +15,8 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
 public class UserDaoJpa extends BasicDaoJpa implements UserDao {
 
     private static final String FIND_BY_PESEL = "select user from User user where user.pesel = :pesel";
-    private static final String FIND_BY_PESEL_PASSHASH = "select user from User user "
-                    + " where user.pesel = :pesel "
+    private static final String FIND_BY_USERNAME_PASSHASH = "select user from User user "
+                    + " where user.username = :username "
                     + " and user.passhash = :passhash ";
     
     @Override
@@ -26,9 +26,9 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
     }
 
     @Override
-    public User findByPeselAndPasshas(String pesel, String passhash) {
-        return (User) getEntityManager().createQuery(FIND_BY_PESEL_PASSHASH)
-                .setParameter("pesel", pesel)
+    public User findByUsernameAndPasshas(String username, String passhash) {
+        return (User) getEntityManager().createQuery(FIND_BY_USERNAME_PASSHASH)
+                .setParameter("username", username)
                 .setParameter("passhash", passhash).getSingleResult();
     }
 

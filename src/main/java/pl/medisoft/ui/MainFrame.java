@@ -13,7 +13,6 @@ import pl.medisoft.ui.admin.system.SysAdminFrame;
 import pl.medisoft.ui.admin.user.UserAdminFrame;
 import pl.medisoft.ui.common.BaseFrame;
 import pl.medisoft.ui.doctor.DoctorFrame;
-import pl.medisoft.ui.login.LoginFrame;
 import pl.medisoft.ui.patient.PatientFrame;
 import pl.medisoft.ui.pharmacy.PharmacyFrame;
 

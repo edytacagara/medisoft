@@ -27,9 +27,9 @@ public class IdentityProvider {
         userDao = new UserDaoJpa();
     }
 
-    public boolean login(final String pesel, final String passhash) {
+    public boolean login(final String username, final String passhash) {
         try {
-            final User user = userDao.findByPeselAndPasshas(pesel, passhash);
+            final User user = userDao.findByUsernameAndPasshas(username, passhash);
             if (user != null) {
                 identity = new Identity(user.getPesel(), user.getName(), user.getSurname());
                 return true;
