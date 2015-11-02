@@ -7,8 +7,6 @@ package pl.medisoft.ui.login;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import pl.medisoft.application.common.StringsUtils;
@@ -16,6 +14,7 @@ import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.LanguageEnum;
 import pl.medisoft.application.message.Messages;
+import pl.medisoft.ui.MainFrame;
 import pl.medisoft.ui.common.BaseFrame;
 import pl.medisoft.ui.common.impl.Item;
 
@@ -23,15 +22,14 @@ import pl.medisoft.ui.common.impl.Item;
  *
  * @author Mariusz Batyra
  */
-public class LoginFrame extends JFrame implements BaseFrame {
+public class LoginFrame extends BaseFrame {
 
-    private final JFrame parent;
     private final Messages messages = Messages.getInstace();
     private final IdentityProvider identityProvider = new IdentityProvider();
 
     public LoginFrame(final JFrame parent) {
-        super(Configuration.TITLE + " " + Configuration.VERSION);
-        this.parent = parent;
+        super(parent);
+        setTitle(Configuration.TITLE + " " + Configuration.VERSION);
         initComponents();
         customize();
         langComboBox.addActionListener(new ActionListener() {
@@ -48,9 +46,7 @@ public class LoginFrame extends JFrame implements BaseFrame {
                 }
             }
         });
-        addWindowListener();
-        setResizable(true);
-        setVisible(true);
+        setResizable(false);
     }
 
     private void customize() {
@@ -170,6 +166,9 @@ public class LoginFrame extends JFrame implements BaseFrame {
         String username = loginTextField.getText();
         String password = passwordField.getText();
         boolean login = identityProvider.login(username, StringsUtils.generateSHA256(password));
+        // TODO if login
+        final JFrame frame = new MainFrame(this);
+        frame.setVisible(true);
     }//GEN-LAST:event_signInButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,24 +181,5 @@ public class LoginFrame extends JFrame implements BaseFrame {
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JButton signInButton;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public JFrame getParent() {
-        return parent;
-    }
-
-    @Override
-    public void addWindowListener() {
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent event) {
-                if (parent != null) {
-                    dispose();
-                    parent.setVisible(true);
-                }
-                System.exit(0);
-            }
-        });
-    }
 
 }
