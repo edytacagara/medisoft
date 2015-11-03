@@ -5,6 +5,7 @@
  */
 package pl.medisoft.application.configuration;
 
+import pl.medisoft.ui.accounting.AccountingFrame;
 import pl.medisoft.ui.admin.clinic.ClinicAdminFrame;
 import pl.medisoft.ui.admin.system.SysAdminFrame;
 import pl.medisoft.ui.admin.user.UserAdminFrame;
@@ -23,7 +24,8 @@ public enum ModuleEnum {
     ADMIN_CLINIC("ADMIN_CLINIC", ClinicAdminFrame.class, "module.admin.clinic"),
     DOCTOR("DOCTOR", DoctorFrame.class, "module.doctor"),
     PATIENT("PATIENT", PatientFrame.class, "module.patient"),
-    PHARMACY("PHARMACY", PharmacyFrame.class, "module.pharmacy");
+    PHARMACY("PHARMACY", PharmacyFrame.class, "module.pharmacy"),
+    ACCOUNTING("ACCOUNTING", AccountingFrame.class, "module.accounting");
 
     private final String roleId;
     private final Class clazz;
