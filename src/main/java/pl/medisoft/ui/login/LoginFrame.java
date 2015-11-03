@@ -168,6 +168,8 @@ public class LoginFrame extends BaseFrame {
         String password = passwordField.getText();
         boolean login = identityProvider.login(username, StringsUtils.generateSHA256(password));
         if(login) {
+            loginTextField.setText("");
+            passwordField.setText("");
             final JFrame frame = new MainFrame(this);
             frame.setVisible(true);
         } else {
