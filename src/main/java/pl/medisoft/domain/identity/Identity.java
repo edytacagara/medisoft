@@ -11,6 +11,7 @@ package pl.medisoft.domain.identity;
  */
 public class Identity {
 
+    private Long id;
     private String pesel;
     private String name;
     private String surname;
@@ -19,12 +20,17 @@ public class Identity {
 
     }
 
-    public Identity(String pesel, String name, String surname) {
+    public Identity(Long id, String pesel, String name, String surname) {
+        this.id = id;
         this.pesel = pesel;
         this.name = name;
         this.surname = surname;
     }
 
+    public Long getId() {
+        return id;
+    }
+    
     public String getPesel() {
         return pesel;
     }

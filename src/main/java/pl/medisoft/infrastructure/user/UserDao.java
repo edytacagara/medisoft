@@ -13,6 +13,7 @@ import pl.medisoft.domain.user.User;
  */
 public interface UserDao {
     
+    User findById(final Long id);
     User findByPesel(final String pesel);
     User findByUsernameAndPasshas(final String username, final String passhash);
     

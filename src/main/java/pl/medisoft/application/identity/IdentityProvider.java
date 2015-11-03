@@ -5,9 +5,11 @@
  */
 package pl.medisoft.application.identity;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pl.medisoft.domain.identity.Identity;
+import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.user.UserDao;
 import pl.medisoft.infrastructure.user.UserDaoJpa;
@@ -31,7 +33,7 @@ public class IdentityProvider {
         try {
             final User user = userDao.findByUsernameAndPasshas(username, passhash);
             if (user != null) {
-                identity = new Identity(user.getPesel(), user.getName(), user.getSurname());
+                identity = new Identity(user.getId(), user.getPesel(), user.getName(), user.getSurname());
                 return true;
             }
         } catch (Exception e) {
@@ -43,6 +45,11 @@ public class IdentityProvider {
     public boolean logout() {
         identity = null;
         return true;
+    }
+    
+    public List<RoleDef> getUserRoles() {
+        final User user = userDao.findById(identity.getId());
+        return user.getUserRoles();
     }
 
 }
