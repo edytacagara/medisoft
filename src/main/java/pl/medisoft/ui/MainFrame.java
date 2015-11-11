@@ -43,6 +43,9 @@ public class MainFrame extends BaseFrame {
         if(userRoles != null) {
             for(RoleDef role : userRoles) {
                 ModuleEnum module = ModuleEnum.fromRole(role.getId());
+                if(module == null) {
+                    continue;
+                }
                 final JButton btn = new JButton(messages.get(module.getMessageKey()));
                 btn.addActionListener(new ActionListener() {
 
