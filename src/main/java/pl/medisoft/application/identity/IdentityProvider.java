@@ -22,7 +22,8 @@ public class IdentityProvider {
 
     private static final Logger LOG = Logger.getLogger(IdentityProvider.class.getName());
 
-    private static Identity identity = null;
+    // Do obgadania
+    public static Identity identity = null;
     private final UserDao userDao;
 
     public IdentityProvider() {
@@ -51,5 +52,7 @@ public class IdentityProvider {
         final User user = userDao.findById(identity.getId());
         return user.getUserRoles();
     }
+    
+
 
 }

@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -16,6 +18,9 @@ import javax.persistence.Table;
  * @author Mariusz Batyra
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "RoleDef.findAllAvailableByUserId", query = "SELECT u FROM RoleDef u where u.id not in (select ur.usersRolesPK.roleId from UsersRoles ur where ur.usuniety = 0 and ur.usersRolesPK.userId = :userId)")
+    })
 @Table(name = "ROLES_DEF", catalog = "", schema = "MEDISOFT")
 public class RoleDef implements Serializable {
 
@@ -50,5 +55,12 @@ public class RoleDef implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return this.description; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
 }

@@ -5,8 +5,11 @@
  */
 package pl.medisoft.infrastructure.user;
 
+import java.util.ArrayList;
+import java.util.List;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.BasicDaoJpa;
+import pl.medisoft.infrastructure.adminsys.dao.impl.UserRolesDaoImpl;
 
 /**
  *
@@ -14,6 +17,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
  */
 public class UserDaoJpa extends BasicDaoJpa implements UserDao {
 
+    private static final String FIND_ALL = "select u from User u";
     private static final String FIND_BY_ID = "select user from User user where user.id = :id";
     private static final String FIND_BY_PESEL = "select user from User user where user.pesel = :pesel";
     private static final String FIND_BY_USERNAME_PASSHASH = "select user from User user "
@@ -36,6 +40,13 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
         return (User) getEntityManager().createQuery(FIND_BY_USERNAME_PASSHASH)
                 .setParameter("username", username)
                 .setParameter("passhash", passhash).getSingleResult();
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<User> users = new ArrayList();
+        users = this.getEntityManager().createQuery(UserDaoJpa.FIND_ALL).getResultList();
+        return users;
     }
 
 }

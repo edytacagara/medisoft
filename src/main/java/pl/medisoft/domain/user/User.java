@@ -205,4 +205,11 @@ public class User implements Serializable {
         this.userRoles = userRoles;
     }
 
+    @Override
+    public String toString() {
+        return this.name + " " + this.surname;
+    }
+    
+    
+
 }

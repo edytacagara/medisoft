@@ -5,6 +5,7 @@
  */
 package pl.medisoft.infrastructure.user;
 
+import java.util.List;
 import pl.medisoft.domain.user.User;
 
 /**
@@ -16,5 +17,6 @@ public interface UserDao {
     User findById(final Long id);
     User findByPesel(final String pesel);
     User findByUsernameAndPasshas(final String username, final String passhash);
+    List<User> findAll();
     
 }
