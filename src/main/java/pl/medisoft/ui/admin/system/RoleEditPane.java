@@ -6,7 +6,6 @@
 package pl.medisoft.ui.admin.system;
 
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.domain.identity.Identity;
@@ -39,47 +38,56 @@ public class RoleEditPane extends javax.swing.JPanel {
     public RoleEditPane() {
         initComponents();
 
-        this.getData();
+        this.getData(this.user.getId());
         this.setDataToComponents();
         this.setButtonVIsible();
-
     }
 
-    private void getData() {
-        this.availableRole = this.userRoleDao.getAvailableRolesByUserId(this.user.getId());
-        this.usersRoles = this.userRoleDao.getUserRoleByUserId(this.user.getId());
+    private void getData(long userId) {
+        this.availableRole = this.userRoleDao.getAvailableRolesByUserId(userId);
+        this.usersRoles = this.userRoleDao.getUserRoleByUserId(userId);
         this.users = this.userDao.findAll();
-
     }
 
     private void setDataToComponents() {
         this.addDataToList(this.roleToAdd, this.availableRole);
         this.addDataToList(this.roleToRemove, this.usersRoles);
         this.addDataToCOmbo(this.usersComboBox, this.users);
-        
+
     }
 
-    private void addDataToCOmbo(JComboBox<User> comboBox,List<User> data){
+    private void addDataToCOmbo(JComboBox<User> comboBox, List<User> data) {
         for (User user : data) {
             comboBox.addItem(user);
         }
     }
-    
+
     private void addDataToList(java.awt.List list, java.util.List data) {
+        list.removeAll();
         for (int i = 0; i < data.size(); i++) {
             list.add(data.get(i).toString(), i);
         }
     }
-    
-    
 
-    private void setButtonVIsible() {
-        this.addRoleButton.setVisible(this.selectedToAdd == -1 ? false : true);
-        this.removeRoleButton.setVisible(this.selectedToRemove == -1 ? false : true);
+    private void clearComponents() {
+        this.usersRoles = null;
+        this.availableRole = null;
+        this.selectedToAdd = -1;
+        this.selectedToRemove = -1;
     }
 
-    private void userChanged() {
-        
+    private void setButtonVIsible() {
+        this.addRoleButton.setEnabled((this.selectedToAdd != -1));
+        this.removeRoleButton.setEnabled((this.selectedToRemove != -1));
+    }
+
+    private void userChanged(User user) {
+        this.clearComponents();
+        this.usersRoles = this.userRoleDao.getUserRoleByUserId(user.getId());
+        this.availableRole = this.userRoleDao.getAvailableRolesByUserId(user.getId());
+        this.addDataToList(this.roleToAdd, this.availableRole);
+        this.addDataToList(this.roleToRemove, this.usersRoles);
+        this.setButtonVIsible();
     }
 
     /**
@@ -101,11 +109,6 @@ public class RoleEditPane extends javax.swing.JPanel {
                 roleToAddItemStateChanged(evt);
             }
         });
-        roleToAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                roleToAddActionPerformed(evt);
-            }
-        });
 
         roleToRemove.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -113,25 +116,20 @@ public class RoleEditPane extends javax.swing.JPanel {
             }
         });
 
-        removeRoleButton.setLabel(">");
+        removeRoleButton.setLabel("<");
         removeRoleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeRoleButtonActionPerformed(evt);
             }
         });
 
-        addRoleButton.setLabel("<");
+        addRoleButton.setLabel(">");
         addRoleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addRoleButtonActionPerformed(evt);
             }
         });
 
-        usersComboBox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                usersComboBoxItemStateChanged(evt);
-            }
-        });
         usersComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usersComboBoxActionPerformed(evt);
@@ -148,7 +146,7 @@ public class RoleEditPane extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(removeRoleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                     .addComponent(addRoleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(roleToRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(126, 126, 126)
@@ -168,11 +166,11 @@ public class RoleEditPane extends javax.swing.JPanel {
                             .addComponent(roleToRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                         .addComponent(addRoleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(removeRoleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93))))
+                        .addGap(112, 112, 112))))
         );
 
         removeRoleButton.getAccessibleContext().setAccessibleDescription("");
@@ -185,25 +183,27 @@ public class RoleEditPane extends javax.swing.JPanel {
     private void removeRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRoleButtonActionPerformed
     }//GEN-LAST:event_removeRoleButtonActionPerformed
 
+    private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
+        this.userChanged((User) ((JComboBox) evt.getSource()).getSelectedItem());
+    }//GEN-LAST:event_usersComboBoxActionPerformed
+
     private void roleToRemoveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_roleToRemoveItemStateChanged
-        // TODO add your handling code here:
+        this.selectedToRemove = ((java.awt.List) evt.getSource()).getSelectedIndex();
+        if (this.selectedToAdd != -1) {
+            this.roleToAdd.deselect(this.selectedToAdd);
+            this.selectedToAdd = -1;
+        }
+        this.setButtonVIsible();
     }//GEN-LAST:event_roleToRemoveItemStateChanged
 
     private void roleToAddItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_roleToAddItemStateChanged
-        // TODO add your handling code here:
+        this.selectedToAdd = ((java.awt.List) evt.getSource()).getSelectedIndex();
+        if (this.selectedToRemove != -1) {
+            this.roleToRemove.deselect(this.selectedToRemove);
+            this.selectedToRemove = -1;
+        }
+        this.setButtonVIsible();
     }//GEN-LAST:event_roleToAddItemStateChanged
-
-    private void roleToAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleToAddActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_roleToAddActionPerformed
-
-    private void usersComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_usersComboBoxItemStateChanged
-        
-    }//GEN-LAST:event_usersComboBoxItemStateChanged
-
-    private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usersComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

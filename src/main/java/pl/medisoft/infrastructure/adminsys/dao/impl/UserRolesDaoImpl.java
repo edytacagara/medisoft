@@ -39,7 +39,9 @@ public class UserRolesDaoImpl extends BasicDaoJpa implements UserRoleDao{
 
     @Override
     public void addRole(RoleDef roleDef, long userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UsersRoles usersRoles = new UsersRoles(userId, roleDef.getId());
+        this.getEntityManager().persist(usersRoles);
+        this.getEntityManager().getTransaction().commit();
     }
     
 }
