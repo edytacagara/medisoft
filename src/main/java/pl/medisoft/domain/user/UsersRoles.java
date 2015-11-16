@@ -6,9 +6,7 @@
 package pl.medisoft.domain.user;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -26,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "USERS_ROLES", catalog = "", schema = "MEDISOFT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UsersRoles.findByUserId", query = "SELECT u FROM UsersRoles u WHERE u.usersRolesPK.userId = :userId and u.usuniety = 0")
+    @NamedQuery(name = "UsersRoles.findByUserId", query = "SELECT u FROM UsersRoles u WHERE u.usersRolesPK.userId = :userId")
     })
 public class UsersRoles implements Serializable {
 
@@ -34,8 +32,6 @@ public class UsersRoles implements Serializable {
     @EmbeddedId
     protected UsersRolesPK usersRolesPK;
     @Basic(optional = false)
-    @Column(name = "USUNIETY")
-    private BigDecimal usuniety;
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private RoleDef roleDef;
@@ -45,11 +41,6 @@ public class UsersRoles implements Serializable {
 
     public UsersRoles(UsersRolesPK usersRolesPK) {
         this.usersRolesPK = usersRolesPK;
-    }
-
-    public UsersRoles(UsersRolesPK usersRolesPK, BigDecimal usuniety) {
-        this.usersRolesPK = usersRolesPK;
-        this.usuniety = usuniety;
     }
 
     public UsersRoles(long userId, String roleId) {
@@ -62,14 +53,6 @@ public class UsersRoles implements Serializable {
 
     public void setUsersRolesPK(UsersRolesPK usersRolesPK) {
         this.usersRolesPK = usersRolesPK;
-    }
-
-    public BigDecimal getUsuniety() {
-        return usuniety;
-    }
-
-    public void setUsuniety(BigDecimal usuniety) {
-        this.usuniety = usuniety;
     }
 
     public RoleDef getRoleDef() {

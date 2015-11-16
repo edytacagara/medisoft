@@ -19,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "RoleDef.findAllAvailableByUserId", query = "SELECT u FROM RoleDef u where u.id not in (select ur.usersRolesPK.roleId from UsersRoles ur where ur.usuniety = 0 and ur.usersRolesPK.userId = :userId)")
+    @NamedQuery(name = "RoleDef.findAllAvailableByUserId", query = "SELECT u FROM RoleDef u where u.id not in (select ur.usersRolesPK.roleId from UsersRoles ur where ur.usersRolesPK.userId = :userId)")
     })
 @Table(name = "ROLES_DEF", catalog = "", schema = "MEDISOFT")
 public class RoleDef implements Serializable {

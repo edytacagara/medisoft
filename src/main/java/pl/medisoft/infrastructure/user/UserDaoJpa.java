@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.BasicDaoJpa;
-import pl.medisoft.infrastructure.adminsys.dao.impl.UserRolesDaoImpl;
 
 /**
  *
