@@ -33,4 +33,11 @@ public class UserParamBean {
         return null;
     }
     
+    public void updateUserLanguage(final long userId, final String lang) {
+        int updateUserParam = userParamDao.updateUserParam(userId, "LANG", lang);
+        if(updateUserParam == 0) {
+            userParamDao.insertUserParam(userId, "LANG", lang);
+        }
+    }
+    
 }

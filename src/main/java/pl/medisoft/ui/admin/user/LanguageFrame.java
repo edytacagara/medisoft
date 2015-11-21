@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.LanguageEnum;
 import pl.medisoft.application.message.Messages;
+import pl.medisoft.application.user.param.UserParamBean;
 import pl.medisoft.ui.common.BaseFrame;
 
 /**
@@ -70,8 +71,8 @@ public class LanguageFrame extends BaseFrame {
     
     private void saveLang(final LanguageEnum lang) {
         if(IdentityProvider.identity != null) {
-            // TODO
-            System.out.println("TODO update lang in database");
+            UserParamBean userParamBean = new UserParamBean();
+            userParamBean.updateUserLanguage(IdentityProvider.identity.getId(), lang.getId());
         }
         customize();
     }

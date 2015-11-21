@@ -13,4 +13,8 @@ public interface UserParamDao {
     
     String findByUserAndParam(final Long userId, final String paramId);
     
+    int updateUserParam(final Long userId, final String paramId, final String paramValue);
+    
+    int insertUserParam(final Long userId, final String paramId, final String paramValue);
+    
 }
