@@ -33,12 +33,12 @@ public class MainFrame extends BaseFrame {
         setTitle(Configuration.TITLE + " " + Configuration.VERSION);
         initComponents();
         btnPanel.setLayout(new GridLayout(ModuleEnum.values().length, 1));
-        drawButtons();
-        
+        customize();
         setResizable(false);
     }
     
     private void drawButtons() {
+        btnPanel.removeAll();
         List<RoleDef> userRoles = identityProvider.getUserRoles();
         if(userRoles != null) {
             for(RoleDef role : userRoles) {
@@ -74,7 +74,7 @@ public class MainFrame extends BaseFrame {
     
     @Override
     public void customize() {
-
+        drawButtons();
     }
     
     @SuppressWarnings("unchecked")
