@@ -43,5 +43,7 @@ public abstract class BaseFrame extends JFrame {
             }
         });
     }
+    
+    public abstract void customize();
 
 }

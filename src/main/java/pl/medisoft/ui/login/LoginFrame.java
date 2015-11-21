@@ -5,6 +5,7 @@
  */
 package pl.medisoft.ui.login;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
@@ -16,6 +17,7 @@ import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.LanguageEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.ui.MainFrame;
+import pl.medisoft.ui.admin.user.LanguageFrame;
 import pl.medisoft.ui.common.BaseFrame;
 import pl.medisoft.ui.common.impl.Item;
 
@@ -33,39 +35,17 @@ public class LoginFrame extends BaseFrame {
         setTitle(Configuration.TITLE + " " + Configuration.VERSION);
         initComponents();
         customize();
-        langComboBox.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox comboBox = (JComboBox) e.getSource();
-                Item item = (Item) comboBox.getSelectedItem();
-                if (item != null) {
-                    String lang = (String) item.getValue();
-                    messages.changeLanguage(LanguageEnum.fromValue(lang));
-                    customize();
-                    langComboBox.setSelectedItem(item);
-                }
-            }
-        });
         setResizable(false);
     }
 
-    private void customize() {
+    @Override
+    public void customize() {
         loginPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(messages.get("app.login.title")));
-        langLabel.setText(messages.get("app.lang"));
-        initLangCombo();
+        changeLangButton.setText(messages.get("app.lang.changeLang"));
         loginLabel.setText(messages.get("app.login.username") + ":");
         passLabel.setText(messages.get("app.login.pass") + ":");
         signInButton.setText(messages.get("app.login.signIn"));
-
-    }
-
-    private void initLangCombo() {
-        langComboBox.removeAllItems();
-        for (LanguageEnum lang : LanguageEnum.values()) {
-            String displayValue = messages.get("app.lang." + lang.getId());
-            langComboBox.addItem(new Item(lang.getId(), displayValue));
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -78,8 +58,7 @@ public class LoginFrame extends BaseFrame {
         loginTextField = new javax.swing.JTextField();
         passwordField = new javax.swing.JPasswordField();
         signInButton = new javax.swing.JButton();
-        langLabel = new javax.swing.JLabel();
-        langComboBox = new javax.swing.JComboBox();
+        changeLangButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -130,9 +109,12 @@ public class LoginFrame extends BaseFrame {
                 .addContainerGap())
         );
 
-        langLabel.setText("Język:");
-
-        langComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        changeLangButton.setText("Zmień język");
+        changeLangButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeLangButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,22 +124,17 @@ public class LoginFrame extends BaseFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(loginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(langLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(langComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(changeLangButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(langLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(langComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(changeLangButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -167,7 +144,7 @@ public class LoginFrame extends BaseFrame {
         String username = loginTextField.getText();
         String password = passwordField.getText();
         boolean login = identityProvider.login(username, StringsUtils.generateSHA256(password));
-        if(login) {
+        if (login) {
             loginTextField.setText("");
             passwordField.setText("");
             final JFrame frame = new MainFrame(this);
@@ -177,9 +154,15 @@ public class LoginFrame extends BaseFrame {
         }
     }//GEN-LAST:event_signInButtonActionPerformed
 
+    private void changeLangButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeLangButtonActionPerformed
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new LanguageFrame(this);
+            frame.setVisible(true);
+        });
+    }//GEN-LAST:event_changeLangButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox langComboBox;
-    private javax.swing.JLabel langLabel;
+    private javax.swing.JButton changeLangButton;
     private javax.swing.JLabel loginLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JTextField loginTextField;
