@@ -6,9 +6,6 @@
 package pl.medisoft.ui.login;
 
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import pl.medisoft.application.common.StringsUtils;
@@ -19,7 +16,6 @@ import pl.medisoft.application.message.Messages;
 import pl.medisoft.ui.MainFrame;
 import pl.medisoft.ui.admin.user.LanguageFrame;
 import pl.medisoft.ui.common.BaseFrame;
-import pl.medisoft.ui.common.impl.Item;
 
 /**
  *
@@ -147,6 +143,7 @@ public class LoginFrame extends BaseFrame {
         if (login) {
             loginTextField.setText("");
             passwordField.setText("");
+            Messages.clearInstance();
             final JFrame frame = new MainFrame(this);
             frame.setVisible(true);
         } else {
