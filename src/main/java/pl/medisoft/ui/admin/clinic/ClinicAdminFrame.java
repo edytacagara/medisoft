@@ -19,13 +19,18 @@ public class ClinicAdminFrame extends BaseFrame {
 
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.ADMIN_CLINIC.getMessageKey());
-    
+
     public ClinicAdminFrame(final JFrame parent) {
         super(parent);
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
         initComponents();
-        
+
         setResizable(false);
+    }
+
+    @Override
+    public void customize() {
+
     }
 
     @SuppressWarnings("unchecked")

@@ -28,14 +28,17 @@ public class SysAdminFrame extends BaseFrame {
         setResizable(false);
     }
 
-    private void initComponents() {//GEN-BEGIN:initComponents
+    @Override
+    public void customize() {
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        roleEditPane1 = new pl.medisoft.ui.admin.system.RoleEditPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-
-        jTabbedPane2.addTab("tab1", roleEditPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -49,10 +52,9 @@ public class SysAdminFrame extends BaseFrame {
         );
 
         pack();
-    }//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane2;
-    private pl.medisoft.ui.admin.system.RoleEditPane roleEditPane1;
     // End of variables declaration//GEN-END:variables
 
 }
