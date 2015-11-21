@@ -177,11 +177,13 @@ public class RoleEditPane extends javax.swing.JPanel {
     }//GEN-END:initComponents
 
     private void addRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoleButtonActionPerformed
-
+        RoleDef roleDef = this.availableRole.get(this.selectedToAdd);
+        this.roleToAdd.remove(this.selectedToAdd);
+        this.selectedToAdd = -1;
+        this.setButtonVIsible();
+        this.userRoleDao.addRole(roleDef, ((User)this.usersComboBox.getSelectedItem()).getId());
+        
     }//GEN-LAST:event_addRoleButtonActionPerformed
-
-    private void removeRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRoleButtonActionPerformed
-    }//GEN-LAST:event_removeRoleButtonActionPerformed
 
     private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
         this.userChanged((User) ((JComboBox) evt.getSource()).getSelectedItem());
@@ -204,6 +206,14 @@ public class RoleEditPane extends javax.swing.JPanel {
         }
         this.setButtonVIsible();
     }//GEN-LAST:event_roleToAddItemStateChanged
+
+    private void removeRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRoleButtonActionPerformed
+        UsersRoles usersRoles = this.usersRoles.get(this.selectedToRemove);
+        this.roleToRemove.remove(this.selectedToRemove);
+        this.selectedToRemove = -1;
+        this.setButtonVIsible();
+        this.userRoleDao.removeRole(usersRoles);
+    }//GEN-LAST:event_removeRoleButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
