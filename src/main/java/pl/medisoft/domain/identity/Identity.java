@@ -43,4 +43,8 @@ public class Identity {
         return surname;
     }
 
+    public String getNameAndSurname() {
+        return name + " " + surname;
+    }
+    
 }
