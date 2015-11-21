@@ -7,13 +7,18 @@ package pl.medisoft.domain.user;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import pl.medisoft.domain.stock.StockInfo;
 
 /**
  *
@@ -22,7 +27,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USERS", catalog = "", schema = "MEDISOFT")
 public class User implements Serializable {
-
+   
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -40,6 +45,8 @@ public class User implements Serializable {
     private List<RuleDef> userRules;
     private List<ParamDef> userParams;
     private List<RoleDef> userRoles;
+    private UsersDetails usersDetails;
+    private List<StockInfo> stockInfoList;
 
     public User() {
     }
@@ -205,11 +212,27 @@ public class User implements Serializable {
         this.userRoles = userRoles;
     }
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    public UsersDetails getUsersDetails() {
+        return usersDetails;
+    }
+
+    public void setUsersDetails(UsersDetails usersDetails) {
+        this.usersDetails = usersDetails;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    public List<StockInfo> getStockInfoList() {
+        return stockInfoList;
+    }
+
+    public void setStockInfoList(List<StockInfo> stockInfoList) {
+        this.stockInfoList = stockInfoList;
+    }
+    
     @Override
     public String toString() {
         return this.name + " " + this.surname;
     }
-    
-    
 
 }
