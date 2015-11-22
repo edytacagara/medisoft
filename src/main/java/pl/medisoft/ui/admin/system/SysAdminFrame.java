@@ -30,9 +30,10 @@ public class SysAdminFrame extends BaseFrame {
 
     @Override
     public void customize() {
-        RoleEditPane roleEditPane = new RoleEditPane();
+        RoleEditPane roleEditPane = new RoleEditPane(this.messages);
+        AccountModifyiPane accountModifyiPane = new AccountModifyiPane(this.messages);
         this.jTabbedPane2.addTab("Edycja roli", roleEditPane);
-        
+        this.jTabbedPane2.addTab("Edycja konta", accountModifyiPane);       
     }
 
     private void initComponents() {//GEN-BEGIN:initComponents
@@ -49,7 +50,7 @@ public class SysAdminFrame extends BaseFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
         );
 
         pack();

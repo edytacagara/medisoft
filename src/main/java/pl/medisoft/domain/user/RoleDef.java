@@ -36,6 +36,11 @@ public class RoleDef implements Serializable {
     public RoleDef(String id) {
         this.id = id;
     }
+    
+    public RoleDef(String id, String description) {
+        this.id = id;
+        this.description = description;
+    }
 
     @Id
     @Column(name = "ID")
@@ -58,7 +63,7 @@ public class RoleDef implements Serializable {
 
     @Override
     public String toString() {
-        return this.description; //To change body of generated methods, choose Tools | Templates.
+        return this.getDescription();
     }
     
     
