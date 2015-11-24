@@ -59,9 +59,9 @@ public class RoleEditPane extends javax.swing.JPanel {
     }
 
     private void addDataToCOmbo(JComboBox<User> comboBox, List<User> data) {
-        data.stream().forEach((user) -> {
-            comboBox.addItem(user);
-        });
+        for(User i : data) {
+            comboBox.addItem(i);
+        }
     }
 
     private void addDataToList(java.awt.List list, java.util.List data) {
