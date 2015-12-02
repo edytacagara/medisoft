@@ -4,6 +4,7 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>pl.medisoft.domain.user.UsersDetails</class>
     <class>pl.medisoft.domain.stock.StockInfo</class>
+    <class>pl.medisoft.domain.admin.clinic.EmploymentReq</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@212.182.25.64:1521:xe"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>

@@ -12,7 +12,7 @@ import pl.medisoft.infrastructure.user.UserDaoJpa;
 
 /**
  *
- * @author root
+ * @author Edyta Cagara
  */
 public class EmployeeComboBoxModel extends DefaultComboBoxModel<User>{
     

@@ -10,7 +10,7 @@ import pl.medisoft.domain.user.RoleDef;
 
 /**
  *
- * @author root
+ * @author Edyta Cagara
  */
 public class UserRoleListModel extends AbstractListModel{
 

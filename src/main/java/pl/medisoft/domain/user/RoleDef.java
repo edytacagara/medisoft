@@ -6,12 +6,15 @@
 package pl.medisoft.domain.user;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import pl.medisoft.domain.admin.clinic.EmploymentReq;
 
 /**
  *
@@ -23,12 +26,13 @@ import javax.persistence.Table;
     })
 @Table(name = "ROLES_DEF", catalog = "", schema = "MEDISOFT")
 public class RoleDef implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
 
     private String id;
     private String description;
-
+    private EmploymentReq employmentReq;
+    
     public RoleDef() {
 
     }
@@ -59,6 +63,15 @@ public class RoleDef implements Serializable {
     @Override
     public String toString() {
         return this.description; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "roleDef")
+    public EmploymentReq getEmploymentReq() {
+        return employmentReq;
+    }
+
+    public void setEmploymentReq(EmploymentReq employmentReq) {
+        this.employmentReq = employmentReq;
     }
     
     

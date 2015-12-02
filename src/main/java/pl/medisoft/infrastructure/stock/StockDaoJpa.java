@@ -12,7 +12,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
 
 /**
  *
- * @author root
+ * @author Edyta Cagara
  */
 public class StockDaoJpa extends BasicDaoJpa implements StockDao{
 

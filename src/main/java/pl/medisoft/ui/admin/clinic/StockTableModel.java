@@ -13,7 +13,7 @@ import pl.medisoft.infrastructure.stock.StockDaoJpa;
 
 /**
  *
- * @author root
+ * @author Edyta Cagara
  */
 public class StockTableModel extends AbstractTableModel{
 

@@ -10,7 +10,7 @@ import pl.medisoft.domain.stock.StockInfo;
 
 /**
  *
- * @author root
+ * @author Edyta Cagara
  */
 public interface StockDao {
     List<StockInfo> findAll();
