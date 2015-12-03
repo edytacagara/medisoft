@@ -24,17 +24,19 @@ public class SysAdminFrame extends BaseFrame {
         super(parent);
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
         initComponents();
-
+        this.customize();
         setResizable(false);
     }
 
     @Override
     public void customize() {
-
+        RoleEditPane roleEditPane = new RoleEditPane(this.messages);
+        AccountModifyiPane accountModifyiPane = new AccountModifyiPane(this.messages);
+        this.jTabbedPane2.addTab("Edycja roli", roleEditPane);
+        this.jTabbedPane2.addTab("Edycja konta", accountModifyiPane);       
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() {//GEN-BEGIN:initComponents
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
 
@@ -44,15 +46,15 @@ public class SysAdminFrame extends BaseFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration//GEN-END:variables
