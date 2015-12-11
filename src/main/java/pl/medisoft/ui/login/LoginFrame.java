@@ -6,6 +6,7 @@
 package pl.medisoft.ui.login;
 
 import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import pl.medisoft.application.common.StringsUtils;
@@ -61,6 +62,12 @@ public class LoginFrame extends BaseFrame {
         loginLabel.setText("Login:");
 
         passLabel.setText("Hasło:");
+
+        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordFieldKeyPressed(evt);
+            }
+        });
 
         signInButton.setText("Zaloguj");
         signInButton.addActionListener(new java.awt.event.ActionListener() {
@@ -157,6 +164,12 @@ public class LoginFrame extends BaseFrame {
             frame.setVisible(true);
         });
     }//GEN-LAST:event_changeLangButtonActionPerformed
+
+    private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            signInButtonActionPerformed(null);
+        }
+    }//GEN-LAST:event_passwordFieldKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton changeLangButton;
