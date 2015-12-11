@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.application.user.note.NoteBean;
