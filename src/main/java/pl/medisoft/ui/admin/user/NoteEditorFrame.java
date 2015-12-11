@@ -7,9 +7,11 @@ package pl.medisoft.ui.admin.user;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.application.user.note.NoteBean;
 import pl.medisoft.domain.note.Note;
+import pl.medisoft.domain.user.User;
 
 /**
  *
@@ -115,7 +117,8 @@ public class NoteEditorFrame extends JFrame {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         note.setData(noteTextArea.getText());
         if(note.getId() == null) {
-            
+            note.setUser(new User(IdentityProvider.identity.getId()));
+            noteBean.createNote(note);
         } else {
             noteBean.updateNote(note);
         }

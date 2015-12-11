@@ -22,4 +22,6 @@ public interface NoteDao {
     
     boolean createNote(final Note note);
     
+    Long getNextValueSeq();
+    
 }

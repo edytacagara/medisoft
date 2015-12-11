@@ -30,8 +30,8 @@ public class NoteBean {
         return noteDao.updateNote(note);
     }
     
-    public void createNote() {
-        
+    public boolean createNote(final Note note) {
+        return noteDao.createNote(note);
     }
     
 }
