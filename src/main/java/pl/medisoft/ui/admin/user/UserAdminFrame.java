@@ -42,6 +42,7 @@ public class UserAdminFrame extends BaseFrame {
     private void initComponents() {
 
         changeLangButton = new javax.swing.JButton();
+        notesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -52,13 +53,22 @@ public class UserAdminFrame extends BaseFrame {
             }
         });
 
+        notesButton.setText("Notatki");
+        notesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                notesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(changeLangButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(changeLangButton, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                    .addComponent(notesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(243, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -66,7 +76,9 @@ public class UserAdminFrame extends BaseFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(changeLangButton)
-                .addContainerGap(266, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(notesButton)
+                .addContainerGap(225, Short.MAX_VALUE))
         );
 
         pack();
@@ -79,8 +91,16 @@ public class UserAdminFrame extends BaseFrame {
         });
     }//GEN-LAST:event_changeLangButtonActionPerformed
 
+    private void notesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notesButtonActionPerformed
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new NotesFrame(this);
+            frame.setVisible(true);
+        });
+    }//GEN-LAST:event_notesButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton changeLangButton;
+    private javax.swing.JButton notesButton;
     // End of variables declaration//GEN-END:variables
 
 }

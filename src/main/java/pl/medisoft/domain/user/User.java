@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import pl.medisoft.domain.note.Note;
 import pl.medisoft.domain.stock.StockInfo;
 
 /**
@@ -27,7 +28,7 @@ import pl.medisoft.domain.stock.StockInfo;
 @Entity
 @Table(name = "USERS", catalog = "", schema = "MEDISOFT")
 public class User implements Serializable {
-   
+    
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -47,6 +48,7 @@ public class User implements Serializable {
     private List<RoleDef> userRoles;
     private UsersDetails usersDetails;
     private List<StockInfo> stockInfoList;
+    private List<Note> notes;
 
     public User() {
     }
@@ -228,6 +230,15 @@ public class User implements Serializable {
 
     public void setStockInfoList(List<StockInfo> stockInfoList) {
         this.stockInfoList = stockInfoList;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
     
     @Override
