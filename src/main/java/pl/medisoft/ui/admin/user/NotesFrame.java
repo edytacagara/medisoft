@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import pl.medisoft.application.identity.IdentityProvider;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.application.user.note.NoteBean;
@@ -29,11 +30,9 @@ public class NotesFrame extends BaseFrame {
     private final NoteBean noteBean = new NoteBean();
     private List<Note> userNotes;
     private final Identity identity = IdentityProvider.identity;
-    private final JFrame parent;
 
     public NotesFrame(final JFrame parent) {
         super(parent);
-        this.parent = parent;
         this.userNotes = noteBean.findUserNotes(identity.getId());
         initComponents();
         customize();
@@ -43,11 +42,6 @@ public class NotesFrame extends BaseFrame {
     @Override
     public void customize() {
         this.addNoteButton.setText(messages.get("app.notes.add"));
-        for (int i = 0; i < notesTable.getColumnCount(); i++) {
-            final String msg = messages.get(PREFIX + HEADERS[i]);
-            notesTable.getTableHeader().getColumnModel().getColumn(i).setHeaderValue(msg);
-        }
-        ((BaseFrame) parent).customize();
     }
 
     private void initDatatable() {
@@ -78,6 +72,11 @@ public class NotesFrame extends BaseFrame {
                     default:
                         throw new UnsupportedOperationException("Column index: " + columnIndex);
                 }
+            }
+
+            @Override
+            public String getColumnName(int columnIndex) {
+                return messages.get(PREFIX + HEADERS[columnIndex]);
             }
         });
     }
