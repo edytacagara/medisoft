@@ -5,6 +5,8 @@
  */
 package pl.medisoft.ui.admin.user;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import pl.medisoft.application.identity.IdentityProvider;
@@ -18,15 +20,25 @@ import pl.medisoft.domain.user.User;
  * @author Mariusz Batyra
  */
 public class NoteEditorFrame extends JFrame {
-
+    
     private final Messages messages = Messages.getInstace();
     private final NoteBean noteBean = new NoteBean();
     private final Note note;
-
-    public NoteEditorFrame(final Note note) {
+    final NotesFrame parent;
+    
+    public NoteEditorFrame(final NotesFrame parent, final Note note) {
+        this.parent = parent;
         this.note = note;
         initComponents();
+        nameTextField.setText(note.getName());
         noteTextArea.setText(note.getData());
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                dispose();
+                parent.refresh();
+            }
+        });
     }
     
     public void customize() {
@@ -35,7 +47,7 @@ public class NoteEditorFrame extends JFrame {
         cancelButton.setText(messages.get("app.notes.cancel"));
         nameLabel.setText(messages.get("app.notes.name"));
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -131,14 +143,15 @@ public class NoteEditorFrame extends JFrame {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
+        parent.refresh();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         final String data = noteTextArea.getText();
         String name = nameTextField.getText();
-        if(name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             int end = (data.length() < 50 ? data.length() : 50);
-            name =  data.substring(0, end);
+            name = data.substring(0, end);
         }
         note.setData(data);
         note.setName(name);

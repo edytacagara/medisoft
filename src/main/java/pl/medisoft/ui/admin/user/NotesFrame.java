@@ -6,7 +6,6 @@
 package pl.medisoft.ui.admin.user;
 
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
@@ -28,8 +27,8 @@ public class NotesFrame extends BaseFrame {
     private static final String[] HEADERS = {"lp", "name", "date"};
     private final Messages messages = Messages.getInstace();
     private final NoteBean noteBean = new NoteBean();
-    private final List<Note> userNotes;
-    private Identity identity = IdentityProvider.identity;
+    private List<Note> userNotes;
+    private final Identity identity = IdentityProvider.identity;
     private final JFrame parent;
 
     public NotesFrame(final JFrame parent) {
@@ -81,7 +80,11 @@ public class NotesFrame extends BaseFrame {
                 }
             }
         });
+    }
 
+    public void refresh() {
+        userNotes = noteBean.findUserNotes(identity.getId());
+        initDatatable();
     }
 
     @SuppressWarnings("unchecked")
@@ -161,7 +164,7 @@ public class NotesFrame extends BaseFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNoteButtonActionPerformed
-        NoteEditorFrame frame = new NoteEditorFrame(new Note());
+        NoteEditorFrame frame = new NoteEditorFrame(this, new Note());
         frame.setVisible(true);
     }//GEN-LAST:event_addNoteButtonActionPerformed
 
@@ -171,7 +174,7 @@ public class NotesFrame extends BaseFrame {
         int row = table.rowAtPoint(p);
         if (evt.getClickCount() == 2) {
             Note note = userNotes.get(row);
-            NoteEditorFrame frame = new NoteEditorFrame(note);
+            NoteEditorFrame frame = new NoteEditorFrame(this, note);
             frame.setVisible(true);
         }
     }//GEN-LAST:event_notesTableMousePressed
