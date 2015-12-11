@@ -33,6 +33,7 @@ public class NoteEditorFrame extends JFrame {
         saveButton.setText(messages.get("app.notes.save"));
         deleteButton.setText(messages.get("app.notes.delete"));
         cancelButton.setText(messages.get("app.notes.cancel"));
+        nameLabel.setText(messages.get("app.notes.name"));
     }
 
     @SuppressWarnings("unchecked")
@@ -44,6 +45,8 @@ public class NoteEditorFrame extends JFrame {
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         noteTextArea = new javax.swing.JTextArea();
+        nameLabel = new javax.swing.JLabel();
+        nameTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -72,6 +75,8 @@ public class NoteEditorFrame extends JFrame {
         noteTextArea.setRows(5);
         jScrollPane1.setViewportView(noteTextArea);
 
+        nameLabel.setText("Nazwa:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,12 +86,17 @@ public class NoteEditorFrame extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(saveButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(saveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(deleteButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(cancelButton)
-                        .addGap(0, 161, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(deleteButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(cancelButton)
+                                .addGap(0, 161, Short.MAX_VALUE))
+                            .addComponent(nameTextField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -97,8 +107,12 @@ public class NoteEditorFrame extends JFrame {
                     .addComponent(saveButton)
                     .addComponent(deleteButton)
                     .addComponent(cancelButton))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -120,7 +134,14 @@ public class NoteEditorFrame extends JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        note.setData(noteTextArea.getText());
+        final String data = noteTextArea.getText();
+        String name = nameTextField.getText();
+        if(name == null || name.isEmpty()) {
+            int end = (data.length() < 50 ? data.length() : 50);
+            name =  data.substring(0, end);
+        }
+        note.setData(data);
+        note.setName(name);
         boolean result = false;
         if (note.getId() == null) {
             note.setUser(new User(IdentityProvider.identity.getId()));
@@ -139,6 +160,8 @@ public class NoteEditorFrame extends JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField nameTextField;
     private javax.swing.JTextArea noteTextArea;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
