@@ -22,11 +22,17 @@ public class NoteEditorFrame extends JFrame {
     private final Messages messages = Messages.getInstace();
     private final NoteBean noteBean = new NoteBean();
     private final Note note;
-    
+
     public NoteEditorFrame(final Note note) {
         this.note = note;
         initComponents();
         noteTextArea.setText(note.getData());
+    }
+    
+    public void customize() {
+        saveButton.setText(messages.get("app.notes.save"));
+        deleteButton.setText(messages.get("app.notes.delete"));
+        cancelButton.setText(messages.get("app.notes.cancel"));
     }
 
     @SuppressWarnings("unchecked")
@@ -100,10 +106,9 @@ public class NoteEditorFrame extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int result = JOptionPane.showConfirmDialog(this, "Czy na pewno chcesz usunąć tą notatkę", "?", JOptionPane.YES_NO_OPTION);
-        if(result == JOptionPane.YES_OPTION) {
-            if(note.getId() != null) {
-                System.out.println("todo usuwanie");
+        int result = JOptionPane.showConfirmDialog(this, messages.get("app.notes.questDelete"), "?", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            if (note.getId() != null) {
                 noteBean.deleteNote(note);
             }
             dispose();
@@ -116,11 +121,17 @@ public class NoteEditorFrame extends JFrame {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         note.setData(noteTextArea.getText());
-        if(note.getId() == null) {
+        boolean result = false;
+        if (note.getId() == null) {
             note.setUser(new User(IdentityProvider.identity.getId()));
-            noteBean.createNote(note);
+            result = noteBean.createNote(note);
         } else {
-            noteBean.updateNote(note);
+            result = noteBean.updateNote(note);
+        }
+        if (result) {
+            JOptionPane.showMessageDialog(this, messages.get("app.notes.saveOk"), "!", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, messages.get("app.notes.saveError"), "!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
