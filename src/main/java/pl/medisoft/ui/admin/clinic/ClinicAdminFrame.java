@@ -7,7 +7,9 @@ package pl.medisoft.ui.admin.clinic;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.swing.JFrame;
+import pl.medisoft.application.common.StringsUtils;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
@@ -26,9 +28,10 @@ import pl.medisoft.ui.common.BaseFrame;
  * @author Edyta Cagara
  */
 public class ClinicAdminFrame extends BaseFrame {
-
+    
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.ADMIN_CLINIC.getMessageKey());
+    private User currentEmployee;
 
     public ClinicAdminFrame(final JFrame parent) {
         super(parent);
@@ -39,6 +42,8 @@ public class ClinicAdminFrame extends BaseFrame {
             employeeSelectComboBox.setSelectedIndex(0);
         if(employmentRoleComboBox.getItemCount() > 0)
         employmentRoleComboBox.setSelectedIndex(0);
+        
+        currentEmployee = null;
         
         setResizable(false);
     }
@@ -69,14 +74,16 @@ public class ClinicAdminFrame extends BaseFrame {
         employeeBonusTextField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         employeeContractComboBox = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        addEmployeeButton = new javax.swing.JButton();
+        removeEmployeeButton = new javax.swing.JButton();
+        saveEmployeeButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         employeeRoleList = new javax.swing.JList();
         employeeSalaryTextField = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         employeeWorktimeTextField = new javax.swing.JTextField();
+        employeePeselTextField = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         employmentRoleComboBox = new javax.swing.JComboBox();
@@ -98,11 +105,11 @@ public class ClinicAdminFrame extends BaseFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1062, Short.MAX_VALUE)
+            .addGap(0, 1077, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 505, Short.MAX_VALUE)
+            .addGap(0, 537, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Telefoniczna rejestracja pacjentow", jPanel1);
@@ -136,17 +143,23 @@ public class ClinicAdminFrame extends BaseFrame {
 
         employeeContractComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton1.setText("Dodaj nowego pracownika");
-
-        jButton2.setText("Usun pracownika");
-
-        jButton3.setText("Zapisz");
-
-        employeeRoleList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        addEmployeeButton.setText("Dodaj nowego pracownika");
+        addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmployeeButtonActionPerformed(evt);
+            }
         });
+
+        removeEmployeeButton.setText("Usun pracownika");
+
+        saveEmployeeButton.setText("Zapisz");
+        saveEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveEmployeeButtonActionPerformed(evt);
+            }
+        });
+
+        employeeRoleList.setModel(new UserRoleListModel());
         jScrollPane2.setViewportView(employeeRoleList);
 
         employeeSalaryTextField.setText("0");
@@ -154,6 +167,8 @@ public class ClinicAdminFrame extends BaseFrame {
         jLabel12.setText("Pensja");
 
         employeeWorktimeTextField.setText("0");
+
+        jLabel13.setText("PESEL");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -163,10 +178,10 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeEmployeeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveEmployeeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -176,14 +191,16 @@ public class ClinicAdminFrame extends BaseFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel10)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(employeePeselTextField)
                             .addComponent(employeeSalaryTextField)
                             .addComponent(employeeBonusTextField)
                             .addComponent(employeeContractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2)
-                            .addComponent(employeeSurnameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(employeeSurnameTextField)
                             .addComponent(employeeNameTextField)
                             .addComponent(employeeSelectComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(employeeWorktimeTextField))))
@@ -205,14 +222,20 @@ public class ClinicAdminFrame extends BaseFrame {
                     .addComponent(employeeSurnameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(employeeWorktimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                    .addComponent(employeePeselTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(employeeWorktimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(employeeContractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
@@ -224,12 +247,12 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(employeeSalaryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(saveEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(addEmployeeButton)
+                    .addComponent(removeEmployeeButton))
                 .addContainerGap())
         );
 
@@ -303,7 +326,7 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(unassignedWorkTimeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(398, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jPanel6);
@@ -321,7 +344,7 @@ public class ClinicAdminFrame extends BaseFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1042, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1057, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -329,7 +352,7 @@ public class ClinicAdminFrame extends BaseFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Inwentaryzacja", jPanel3);
@@ -341,37 +364,57 @@ public class ClinicAdminFrame extends BaseFrame {
 
     private void employeeSelectComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeSelectComboBoxActionPerformed
 
-        User user = (User)employeeSelectComboBox.getSelectedItem();
-        UsersDetails userDetails = user.getUsersDetails();
-        List<RoleDef> userRoles = user.getUserRoles();
-
-        employeeRoleList.setListData(userRoles.toArray());
-        
-        employeeNameTextField.setText(user.getName());
-        employeeSurnameTextField.setText(user.getSurname());
-
-        int totalSalary = 0;
-        if(userDetails != null){
-            EmploymentReqDao employmentReqDao = new EmploymentReqDaoJpa();
-            List<EmploymentReq> employmentReqs = employmentReqDao.findAll();
-            for(int i=0;i<employmentReqs.size();i++){
-                if(userRoles.contains(employmentReqs.get(i).getRoleDef())){
-                    int salaryBase = employmentReqs.get(i).getSalaryBase().intValue();
-                    int workTime = userDetails.getWorkTime().intValue();
-                    totalSalary += workTime * salaryBase;
-                }
-            }
-            
-            int bonus = userDetails.getBonus().intValue();
-            int salaryWithBonus = (int)Math.round(totalSalary*(100+bonus)/100.0);
-            employeeWorktimeTextField.setText(userDetails.getWorkTime().toString());
-            employeeBonusTextField.setText(Integer.toString(bonus) + "%");
-            employeeSalaryTextField.setText(Integer.toString(salaryWithBonus));
+        if(employeeSelectComboBox.getSelectedIndex() == -1){
+            employeeNameTextField.setText("");
+            employeeSurnameTextField.setText("");
+            employeePeselTextField.setText("");
         }
         else{
-            employeeWorktimeTextField.setText("brak danych");
-            employeeBonusTextField.setText("brak danych");
-            employeeSalaryTextField.setText("brak danych");
+            User user = (User)employeeSelectComboBox.getSelectedItem();
+            EmploymentReqDao employmentReqDao = new EmploymentReqDaoJpa();
+            List<EmploymentReq> employmentReqs = employmentReqDao.findAll();
+            this.currentEmployee = user;
+            UsersDetails userDetails = user.getUsersDetails();
+            List<RoleDef> userRoles = user.getUserRoles();
+            
+            employeeRoleList.setListData(employmentReqs.toArray());
+            int[] selectedIndices = new int[userRoles.size()];
+            
+            for(int i=0; i<userRoles.size(); i++){
+                for(int k=0;k<employmentReqs.size();k++){
+                    if(employmentReqs.get(k).getRoleDef().equals(userRoles.get(i)))
+                        selectedIndices[i] = k;
+                }
+            }
+            employeeRoleList.setSelectedIndices(selectedIndices);
+            
+            employeeNameTextField.setText(user.getName());
+            employeeSurnameTextField.setText(user.getSurname());
+            employeePeselTextField.setText(user.getPesel());
+
+            int totalSalary = 0;
+            if(userDetails != null){
+                
+                
+                for(int i=0;i<employmentReqs.size();i++){
+                    if(userRoles.contains(employmentReqs.get(i).getRoleDef())){
+                        int salaryBase = employmentReqs.get(i).getSalaryBase().intValue();
+                        int workTime = userDetails.getWorkTime().intValue();
+                        totalSalary += workTime * salaryBase;
+                    }
+                }
+
+                int bonus = userDetails.getBonus().intValue();
+                int salaryWithBonus = (int)Math.round(totalSalary*(100+bonus)/100.0);
+                employeeWorktimeTextField.setText(userDetails.getWorkTime().toString());
+                employeeBonusTextField.setText(Integer.toString(bonus) + "%");
+                employeeSalaryTextField.setText(Integer.toString(salaryWithBonus));
+            }
+            else{
+                employeeWorktimeTextField.setText("brak danych");
+                employeeBonusTextField.setText("brak danych");
+                employeeSalaryTextField.setText("brak danych");
+            }
         }
     }//GEN-LAST:event_employeeSelectComboBoxActionPerformed
 
@@ -397,10 +440,38 @@ public class ClinicAdminFrame extends BaseFrame {
         unassignedWorkTimeTextField.setText(Integer.toString(employmentReq.getWorktimeReq().intValue()-totalWorktime));
     }//GEN-LAST:event_employmentRoleComboBoxActionPerformed
 
+    private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
+        this.currentEmployee = null;
+        this.employeeSelectComboBox.setSelectedIndex(-1);
+    }//GEN-LAST:event_addEmployeeButtonActionPerformed
+
+    private void saveEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEmployeeButtonActionPerformed
+        if(this.currentEmployee == null){
+            this.currentEmployee = new User();
+            this.currentEmployee.setName(this.employeeNameTextField.getText());
+            this.currentEmployee.setSurname(this.employeeSurnameTextField.getText());
+            this.currentEmployee.setPesel(this.employeePeselTextField.getText());
+            
+            String username = this.employeeNameTextField.getText().toLowerCase().substring(0,1) +
+                    this.employeeSurnameTextField.getText().toLowerCase();
+            
+            this.currentEmployee.setUsername(username);
+            this.currentEmployee.setPasshash(StringsUtils.generateSHA256(username));
+            List<RoleDef> userRoles = this.employeeRoleList.getSelectedValuesList();
+            this.currentEmployee.setUserRoles(userRoles);
+            
+            new UserDaoJpa().addUser(currentEmployee);
+            this.employeeSelectComboBox.setModel(new EmployeeComboBoxModel());
+            this.employeeSelectComboBox.validate();
+        }
+    }//GEN-LAST:event_saveEmployeeButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addEmployeeButton;
     private javax.swing.JTextField employeeBonusTextField;
     private javax.swing.JComboBox employeeContractComboBox;
     private javax.swing.JTextField employeeNameTextField;
+    private javax.swing.JTextField employeePeselTextField;
     private javax.swing.JList employeeRoleList;
     private javax.swing.JTextField employeeSalaryTextField;
     private javax.swing.JComboBox employeeSelectComboBox;
@@ -409,13 +480,11 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JComboBox employmentRoleComboBox;
     private javax.swing.JTextField employmentSalaryBaseTextField;
     private javax.swing.JTextField employmentWorkTimeTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -435,6 +504,8 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton removeEmployeeButton;
+    private javax.swing.JButton saveEmployeeButton;
     private javax.swing.JTextField unassignedWorkTimeTextField;
     // End of variables declaration//GEN-END:variables
 
