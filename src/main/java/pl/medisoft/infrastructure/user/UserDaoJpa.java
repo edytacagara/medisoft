@@ -17,6 +17,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
 public class UserDaoJpa extends BasicDaoJpa implements UserDao {
 
     private static final String FIND_ALL = "select u from User u";
+    private static final String FIND_ALL_EMPLOYEES = "select distinct u from User u, UsersRoles r, EmploymentReq e where u.id = r.usersRolesPK.userId and r.usersRolesPK.roleId = e.roleId";
     private static final String FIND_BY_ID = "select user from User user where user.id = :id";
     private static final String FIND_BY_PESEL = "select user from User user where user.pesel = :pesel";
     private static final String FIND_BY_USERNAME_PASSHASH = "select user from User user "
@@ -48,4 +49,15 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
         return users;
     }
 
+    public List<User> findAllEmployees() {
+        List<User> users = new ArrayList();
+        users = this.getEntityManager().createQuery(UserDaoJpa.FIND_ALL_EMPLOYEES).getResultList();
+        return users;
+    }
+    
+    public void addUser(User user){
+        this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().persist(user);
+        this.getEntityManager().getTransaction().commit();
+    }
 }
