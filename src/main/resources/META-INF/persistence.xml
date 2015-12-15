@@ -4,8 +4,9 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>pl.medisoft.domain.user.UsersDetails</class>
     <class>pl.medisoft.domain.stock.StockInfo</class>
-    <class>pl.medisoft.domain.admin.clinic.EmploymentReq</class>
     <class>pl.medisoft.domain.note.Note</class>
+    <class>pl.medisoft.domain.Patient.VisitType</class>
+    <class>pl.medisoft.domain.Patient.Visit</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@212.182.25.64:1521:xe"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
@@ -16,6 +17,8 @@
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
       <property name="hibernate.use_sql_comments" value="true"/>
+      <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
+
     </properties>
   </persistence-unit>
 </persistence>
