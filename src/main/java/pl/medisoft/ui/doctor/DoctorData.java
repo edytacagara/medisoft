@@ -6,7 +6,6 @@
 package pl.medisoft.ui.doctor;
 
 import java.math.BigInteger;
-
 /**
  *
  * @author michal.zahir
@@ -16,6 +15,8 @@ public class DoctorData extends javax.swing.JFrame {
     /**
      * Creates new form DoctorData
      */
+    
+    
     public DoctorData() {
         initComponents();
         UpdateButton.setVisible(false);
@@ -68,7 +69,6 @@ public class DoctorData extends javax.swing.JFrame {
         InsertButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -384,11 +384,6 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 2.0;
         getContentPane().add(jPanel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 5;
-        getContentPane().add(jXDatePicker1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -409,7 +404,7 @@ public class DoctorData extends javax.swing.JFrame {
         d.setSpecialty(SpecialtyTextField.getText());
         d.setTitle(TitleTextField.getText());
         d.setEmail(EmailTextField.getText());
-        d.setDateOfBirth(jXDatePicker1.getDate());
+        //d.setDateOfBirth(jXDatePicker1.getDate());
         String x = OfficePhoneTextField.getText();
         String y = ExperienceYearsTextField.getText();
         d.setOfficeAddress(OfficeAddressTextField.getText());
@@ -496,6 +491,5 @@ public class DoctorData extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     // End of variables declaration//GEN-END:variables
 }
