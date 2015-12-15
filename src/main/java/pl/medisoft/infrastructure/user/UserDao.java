@@ -18,5 +18,6 @@ public interface UserDao {
     User findByPesel(final String pesel);
     User findByUsernameAndPasshas(final String username, final String passhash);
     List<User> findAll();
-    
+    List<User> findAllEmployees();
+    void addUser(User user);
 }

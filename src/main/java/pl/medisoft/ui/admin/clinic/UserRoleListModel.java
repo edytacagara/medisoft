@@ -5,8 +5,12 @@
  */
 package pl.medisoft.ui.admin.clinic;
 
+import java.util.List;
 import javax.swing.AbstractListModel;
+import pl.medisoft.domain.admin.clinic.EmploymentReq;
 import pl.medisoft.domain.user.RoleDef;
+import pl.medisoft.infrastructure.admin.clinic.EmploymentReqDao;
+import pl.medisoft.infrastructure.admin.clinic.EmploymentReqDaoJpa;
 
 /**
  *
@@ -14,16 +18,23 @@ import pl.medisoft.domain.user.RoleDef;
  */
 public class UserRoleListModel extends AbstractListModel{
 
+    private EmploymentReqDao employmentReqDaoJpa;
+    private List<EmploymentReq> employmentReqs;
     
+    public UserRoleListModel(){
+        super();
+        this.employmentReqDaoJpa = new EmploymentReqDaoJpa();
+        this.employmentReqs = employmentReqDaoJpa.findAll();
+    }
     
     @Override
     public int getSize() {
-        return 0;
+        return this.employmentReqs.size();
     }
 
     @Override
     public Object getElementAt(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.employmentReqs.get(index).getRoleDef();
     }
     
 }

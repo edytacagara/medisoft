@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import pl.medisoft.domain.note.Note;
 import pl.medisoft.domain.stock.StockInfo;
 
@@ -64,6 +67,9 @@ public class User implements Serializable {
     }
 
     @Id
+    @TableGenerator(name="TABLE_GEN", table="SEQUENCE", pkColumnName="SEQ_NAME",
+        valueColumnName="SEQ_COUNT", pkColumnValue="USERS_SEQ")
+    @GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN")
     @Column(name = "ID")
     public Long getId() {
         return id;

@@ -5,8 +5,10 @@
  */
 package pl.medisoft.ui.admin.clinic;
 
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.user.UserDaoJpa;
 
@@ -22,7 +24,7 @@ public class EmployeeComboBoxModel extends DefaultComboBoxModel<User>{
     public EmployeeComboBoxModel(){
         super();
         this.userDaoJpa = new UserDaoJpa();
-        this.users = userDaoJpa.findAll();
+        this.users = userDaoJpa.findAllEmployees();
     }
     
     @Override
