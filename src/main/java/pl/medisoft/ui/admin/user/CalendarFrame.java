@@ -8,6 +8,8 @@ package pl.medisoft.ui.admin.user;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
@@ -47,6 +49,7 @@ public class CalendarFrame extends BaseFrame {
             }
         });
         initTable(new ArrayList<>());
+        setToday();
     }
 
     private void initMonthCombo() {
@@ -106,6 +109,17 @@ public class CalendarFrame extends BaseFrame {
         });
     }
 
+    private void setToday() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        monthComboBox.setSelectedIndex(month);
+        dayComboBox.setSelectedIndex(day - 1);
+        showButtonActionPerformed(null);
+    }
+    
     @Override
     public void customize() {
         initMonthCombo();
