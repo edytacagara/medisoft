@@ -34,6 +34,7 @@ public class UserAdminFrame extends BaseFrame {
     @Override
     public void customize() {
         changeLangButton.setText(messages.get("app.lang.changeLang"));
+        calendarButton.setText(messages.get("app.calendar.title"));
         ((BaseFrame) parent).customize();
     }
 
@@ -43,6 +44,7 @@ public class UserAdminFrame extends BaseFrame {
 
         changeLangButton = new javax.swing.JButton();
         notesButton = new javax.swing.JButton();
+        calendarButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -60,6 +62,13 @@ public class UserAdminFrame extends BaseFrame {
             }
         });
 
+        calendarButton.setText("Kalendarz");
+        calendarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calendarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -68,8 +77,9 @@ public class UserAdminFrame extends BaseFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(changeLangButton, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                    .addComponent(notesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(243, Short.MAX_VALUE))
+                    .addComponent(notesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(calendarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,7 +88,9 @@ public class UserAdminFrame extends BaseFrame {
                 .addComponent(changeLangButton)
                 .addGap(18, 18, 18)
                 .addComponent(notesButton)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(calendarButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,7 +110,15 @@ public class UserAdminFrame extends BaseFrame {
         });
     }//GEN-LAST:event_notesButtonActionPerformed
 
+    private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calendarButtonActionPerformed
+         EventQueue.invokeLater(() -> {
+            JFrame frame = new CalendarFrame(this);
+            frame.setVisible(true);
+        });
+    }//GEN-LAST:event_calendarButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton calendarButton;
     private javax.swing.JButton changeLangButton;
     private javax.swing.JButton notesButton;
     // End of variables declaration//GEN-END:variables
