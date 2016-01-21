@@ -42,7 +42,7 @@ public class Visit implements Serializable  {
     
     @Column(name = "VISIT_DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date VisitDate;
+    private Date visitDate;
     
     @JoinColumn(name = "DOCTOR_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     @OneToOne(optional = false)    
@@ -55,16 +55,16 @@ public class Visit implements Serializable  {
         this.id = id;
         this.visitType = visitType;
         this.patient = patient;
-        this.VisitDate = VisitDate;
+        this.visitDate = VisitDate;
         this.doctor = doctor;
     }
 
     public Date getVisitDate() {
-        return VisitDate;
+        return visitDate;
     }
 
     public void setVisitDate(Date VisitDate) {
-        this.VisitDate = VisitDate;
+        this.visitDate = VisitDate;
     }
 
     public long getId() {
