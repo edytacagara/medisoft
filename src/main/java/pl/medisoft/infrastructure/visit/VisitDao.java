@@ -7,6 +7,7 @@ package pl.medisoft.infrastructure.visit;
 
 import java.util.List;
 import pl.medisoft.domain.Patient.Visit;
+import pl.medisoft.domain.Patient.VisitType;
 
 /**
  *
@@ -15,5 +16,8 @@ import pl.medisoft.domain.Patient.Visit;
 public interface VisitDao {
     
     List<Visit> findAllVisit(Long userId, String date);
+    List<VisitType> findAllVisitType(); 
+    void addVisit(Visit visit);
+
     
 }

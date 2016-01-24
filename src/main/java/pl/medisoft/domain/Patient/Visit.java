@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import pl.medisoft.domain.identity.*;
 import pl.medisoft.domain.user.User;
+import pl.medisoft.ui.doctor.Doctor;
 
 /**
  *
@@ -46,12 +47,12 @@ public class Visit implements Serializable  {
     
     @JoinColumn(name = "DOCTOR_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     @OneToOne(optional = false)    
-    private User doctor;
+    private Doctor doctor;
 
     public Visit() {
     }
 
-    public Visit(long id, VisitType visitType, User patient, Date VisitDate, User doctor) {
+    public Visit(long id, VisitType visitType, User patient, Date VisitDate, Doctor doctor) {
         this.id = id;
         this.visitType = visitType;
         this.patient = patient;
@@ -93,11 +94,11 @@ public class Visit implements Serializable  {
 
   
 
-    public User getDoctor() {
+    public Doctor getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(User doctor) {
+    public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
     

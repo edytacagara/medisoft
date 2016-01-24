@@ -60,4 +60,6 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
         this.getEntityManager().persist(user);
         this.getEntityManager().getTransaction().commit();
     }
+
+      
 }

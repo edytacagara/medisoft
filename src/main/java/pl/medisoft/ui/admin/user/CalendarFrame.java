@@ -90,7 +90,7 @@ public class CalendarFrame extends BaseFrame {
                     case 0:
                         return String.valueOf(rowIndex + 1);
                     case 1:
-                        return v.getDoctor().getName() + " " + v.getDoctor().getSurname();
+                        return v.getDoctor().getName() + " " + v.getDoctor().getLastName();
                     case 2:
                         return v.getPatient().getName() + " " + v.getPatient().getSurname();
                     case 3:

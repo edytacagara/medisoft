@@ -227,7 +227,7 @@ public class Doctor implements Serializable {
 
     @Override
     public String toString() {
-        return "pl.medisoft.ui.doctor.Doctor[ id=" + id + " ]";
+        return title+" "+name+" "+this.lastName;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

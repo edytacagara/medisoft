@@ -49,6 +49,9 @@ public class VisitType implements Serializable{
     public void setDescription(String Description) {
         this.Description = Description;
     }
- 
+   @Override
+    public String toString() {
+        return this.Description.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
