@@ -8,6 +8,7 @@ package pl.medisoft.ui.doctor;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.BasicDaoJpa;
 import pl.medisoft.infrastructure.EntityManagerSingleton;
 
@@ -57,7 +58,12 @@ public class DBManager extends BasicDaoJpa {
 
         em.getTransaction().commit();
     }
+ public void insert(User c) {
+        em.getTransaction().begin();
+        em.persist(c);
 
+        em.getTransaction().commit();
+    }
     //find a record by it's id
     public Doctor findById(int id) {
         Doctor c = em.find(Doctor.class, id);

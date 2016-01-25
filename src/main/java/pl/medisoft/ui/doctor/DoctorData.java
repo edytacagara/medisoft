@@ -6,7 +6,13 @@
 package pl.medisoft.ui.doctor;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import pl.medisoft.domain.user.User;
 
 /**
  *
@@ -71,6 +77,7 @@ public class DoctorData extends javax.swing.JFrame {
         InsertButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        DateOfBirthTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -386,6 +393,16 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 2.0;
         getContentPane().add(jPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 53;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        getContentPane().add(DateOfBirthTextField, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -400,6 +417,8 @@ public class DoctorData extends javax.swing.JFrame {
 
     private void InsertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InsertButtonActionPerformed
         Doctor d = new Doctor();
+        User u = new User();
+        
         //d.setId(8L);
         d.setName(NameTextField.getText());
         d.setLastName(LastNameTextField.getText());
@@ -413,6 +432,15 @@ public class DoctorData extends javax.swing.JFrame {
         d.setOfficePhone(new BigInteger(x));
         d.setExperienceYears(new Short(y));
         d.setPhoneNumber(PhonNumberTextField.getText());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date date = null;
+        try {
+            date = formatter.parse(DateOfBirthTextField.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(PrescriptionData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        d.setDateOfBirth(date);
         DBManager dbm = new DBManager();
         dbm.insert(d);
         dbm.close();
@@ -465,6 +493,7 @@ public class DoctorData extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel DateOfBirthLabel;
+    private javax.swing.JTextField DateOfBirthTextField;
     private javax.swing.JButton DeleteButton;
     private javax.swing.JLabel EmailLabel;
     private javax.swing.JTextField EmailTextField;
