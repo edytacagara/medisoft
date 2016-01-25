@@ -5,6 +5,8 @@
  */
 package pl.medisoft.ui.doctor;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
@@ -28,6 +30,7 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
 
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.DOCTOR.getMessageKey());
+     static PrescriptionDBManager dbm = new PrescriptionDBManager();
 
     public DoctorFrame(final JFrame parent) {
         super(parent);
@@ -36,20 +39,35 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
         ListSelectionModel selectionModel = jTable2.getSelectionModel();
         selectionModel.addListSelectionListener(this);
         setResizable(false);
+        parent.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e)
+    {
+                 exitProcedure();
+
     }
+});
+        //setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      
+    }
+    public void exitProcedure() {
+        dbm.close();
+        this.dispose();
+    
+    System.exit(0);
+}
+    
     public void valueChanged(ListSelectionEvent event){
        if(event.getSource() == jTable2.getSelectionModel()&& event.getValueIsAdjusting()){
-           
+
            
            TableModel model = (TableModel) jTable2.getModel();
            Integer i = Integer.valueOf(  model.getValueAt(jTable2.getSelectedRow(), 7).toString());
-           PrescriptionDBManager dbm = new PrescriptionDBManager();
            Prescription p = dbm.findById(BigDecimal.valueOf(i));
-           dbm.close();
            
            new PrescriptionData(p).setVisible(true);
            setVisible(false);
            dispose();
+           //dbm.close();
+
        }
         
     }
@@ -348,6 +366,8 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
         dispose();
     }//GEN-LAST:event_WypisujRecepteButtonActionPerformed
 
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton WypisujRecepteButton;
     private javax.swing.JButton addDoctorButton;

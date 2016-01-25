@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pl.medisoft.domain.Patient.Prescription;
 import pl.medisoft.infrastructure.doctor.PrescriptionDBManager;
+import pl.medisoft.ui.doctor.DoctorFrame;
+
 
 /**
  *
@@ -27,7 +29,7 @@ public class PrescriptionData extends javax.swing.JFrame {
      * Creates new form DoctorData
      */
     Prescription pre;
-
+    
     public PrescriptionData() {
         initComponents();
         UpdateButton.setVisible(false);
@@ -77,6 +79,7 @@ public class PrescriptionData extends javax.swing.JFrame {
         InsertButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
@@ -271,6 +274,8 @@ public class PrescriptionData extends javax.swing.JFrame {
         gridBagConstraints.weightx = 2.0;
         getContentPane().add(jPanel1, gridBagConstraints);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setMargin(new java.awt.Insets(7, 7, 7, 7));
@@ -278,10 +283,18 @@ public class PrescriptionData extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 10;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.gridwidth = 15;
+        getContentPane().add(jPanel2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -318,7 +331,8 @@ public class PrescriptionData extends javax.swing.JFrame {
         }
         p.setValidDate(date);
         p.setDoctorId(new BigInteger(y));
-        PrescriptionDBManager dbm = new PrescriptionDBManager();
+        
+        //PrescriptionDBManager dbm = new PrescriptionDBManager();
 //        Doctor d  = new Doctor();
 //        //d.setId(8L);
 //        d.PatientNameTextFieldextField.getText());
@@ -334,8 +348,8 @@ public class PrescriptionData extends javax.swing.JFrame {
 //        d.setExperienceYears(new Short(y));
 //        d.setPhoneNumber(PhonNumberTextField.getText());
 //        DBManager dbm = new DBManager();
-        dbm.insert(p);
-        dbm.close();
+        DoctorFrame.dbm.insert(p);
+        //dbm.close();
         setVisible(false);
         dispose();
         DoctorFrame Df = new DoctorFrame(this);
@@ -365,20 +379,20 @@ public class PrescriptionData extends javax.swing.JFrame {
         }
         p.setValidDate(date);
         p.setDoctorId(new BigInteger(y));
-        PrescriptionDBManager dbm = new PrescriptionDBManager();
-        dbm.update(p);
-        dbm.close();
+       // PrescriptionDBManager dbm = new PrescriptionDBManager();
+        DoctorFrame.dbm.update(p);
         setVisible(false);
         dispose();
         DoctorFrame Df = new DoctorFrame(this);
         Df.setVisible(true);
+        //dbm.close();
 
     }//GEN-LAST:event_UpdateButtonActionPerformed
-
+  
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
-        PrescriptionDBManager dbm = new PrescriptionDBManager();
-        dbm.delete(this.pre);
-        dbm.close();
+        //PrescriptionDBManager dbm = new PrescriptionDBManager();
+        DoctorFrame.dbm.delete(this.pre);
+        //dbm.close();
         setVisible(false);
         dispose();
         DoctorFrame Df = new DoctorFrame(this);
@@ -440,6 +454,7 @@ public class PrescriptionData extends javax.swing.JFrame {
     private javax.swing.JTextField ValidDateTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
