@@ -5,27 +5,46 @@
  */
 package pl.medisoft.ui.doctor;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import javax.swing.JOptionPane;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pl.medisoft.domain.Patient.Prescription;
+import pl.medisoft.infrastructure.doctor.PrescriptionDBManager;
 
 /**
  *
  * @author michal.zahir
  */
-public class DoctorData extends javax.swing.JFrame {
+public class PrescriptionData extends javax.swing.JFrame {
 
     /**
      * Creates new form DoctorData
      */
-    public DoctorData() {
+    Prescription pre;
+
+    public PrescriptionData() {
         initComponents();
         UpdateButton.setVisible(false);
         DeleteButton.setVisible(false);
         InsertButton.setVisible(true);
     }
 
-    public DoctorData(Doctor d) {
+    public PrescriptionData(Prescription d) {
         initComponents();
+        this.pre = d;
+        PatientNameTextField.setText(d.getPatientName());
+        jTextArea1.setText(d.getDescription());
+        QuantityTextField.setText(d.getQuantityValue().toString());
+        DrIdTextField.setText(d.getDoctorId().toString());
+        ValidDateTextField.setText(d.getValidDate().toString());
+
+        //
         UpdateButton.setVisible(true);
         DeleteButton.setVisible(true);
         InsertButton.setVisible(false);
@@ -42,40 +61,29 @@ public class DoctorData extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         NameLabel = new javax.swing.JLabel();
-        NameTextField = new javax.swing.JTextField();
+        PatientNameTextField = new javax.swing.JTextField();
         LastNameLabel = new javax.swing.JLabel();
-        DateOfBirthLabel = new javax.swing.JLabel();
-        LastNameTextField = new javax.swing.JTextField();
-        EmailLabel = new javax.swing.JLabel();
-        PhoneNumberLabel = new javax.swing.JLabel();
+        DrIdTextField = new javax.swing.JTextField();
         OfficeAddressLabel = new javax.swing.JLabel();
-        OfficePhoneLabel = new javax.swing.JLabel();
-        PhonNumberLabel = new javax.swing.JLabel();
-        EmailTextField = new javax.swing.JTextField();
-        PhoneNumberTextField = new javax.swing.JTextField();
-        OfficeAddressTextField = new javax.swing.JTextField();
-        OfficePhoneTextField = new javax.swing.JTextField();
-        PhonNumberTextField = new javax.swing.JTextField();
-        SpecialtyTextField = new javax.swing.JTextField();
-        TitleTextField = new javax.swing.JTextField();
+        ValidDateTextField = new javax.swing.JTextField();
+        QuantityTextField = new javax.swing.JTextField();
         SpecialtyLabel = new javax.swing.JLabel();
         TitleLabel = new javax.swing.JLabel();
         ExperenieceYearsLabel = new javax.swing.JLabel();
-        ExperienceYearsTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         InsertButton = new javax.swing.JButton();
         UpdateButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        NameLabel.setText("Name");
+        NameLabel.setText("Patient Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -86,9 +94,9 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(NameLabel, gridBagConstraints);
 
-        NameTextField.addActionListener(new java.awt.event.ActionListener() {
+        PatientNameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NameTextFieldActionPerformed(evt);
+                PatientNameTextFieldActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -100,9 +108,9 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(NameTextField, gridBagConstraints);
+        getContentPane().add(PatientNameTextField, gridBagConstraints);
 
-        LastNameLabel.setText("Last Name");
+        LastNameLabel.setText("Doctor ID");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -112,19 +120,9 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(LastNameLabel, gridBagConstraints);
 
-        DateOfBirthLabel.setText("Date Of birth");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(DateOfBirthLabel, gridBagConstraints);
-
-        LastNameTextField.addActionListener(new java.awt.event.ActionListener() {
+        DrIdTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LastNameTextFieldActionPerformed(evt);
+                DrIdTextFieldActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -136,29 +134,7 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(LastNameTextField, gridBagConstraints);
-
-        EmailLabel.setText("Email");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(EmailLabel, gridBagConstraints);
-
-        PhoneNumberLabel.setText("Phone Number");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(PhoneNumberLabel, gridBagConstraints);
-
-        OfficeAddressLabel.setText("Office Address");
+        getContentPane().add(DrIdTextField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -167,76 +143,6 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(OfficeAddressLabel, gridBagConstraints);
-
-        OfficePhoneLabel.setText("Office Phone");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(OfficePhoneLabel, gridBagConstraints);
-
-        PhonNumberLabel.setText("Phon Number");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(PhonNumberLabel, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 53;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(EmailTextField, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 53;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(PhoneNumberTextField, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 53;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(OfficeAddressTextField, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 53;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(OfficePhoneTextField, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 53;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(PhonNumberTextField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 18;
         gridBagConstraints.gridy = 1;
@@ -246,7 +152,7 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(SpecialtyTextField, gridBagConstraints);
+        getContentPane().add(ValidDateTextField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 18;
         gridBagConstraints.gridy = 2;
@@ -256,9 +162,9 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(TitleTextField, gridBagConstraints);
+        getContentPane().add(QuantityTextField, gridBagConstraints);
 
-        SpecialtyLabel.setText("Specialty");
+        SpecialtyLabel.setText("Valid Date");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 1;
@@ -267,7 +173,7 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(SpecialtyLabel, gridBagConstraints);
 
-        TitleLabel.setText("Title");
+        TitleLabel.setText("Quantity");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 2;
@@ -277,27 +183,18 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(TitleLabel, gridBagConstraints);
 
-        ExperenieceYearsLabel.setText("Experience years");
+        ExperenieceYearsLabel.setText("Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 17;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(ExperenieceYearsLabel, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(ExperienceYearsTextField, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Personal Info");
+        jLabel1.setText("Prescription Info");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -311,15 +208,6 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(jSeparator1, gridBagConstraints);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Contact Info");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -327,15 +215,6 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(jSeparator2, gridBagConstraints);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Professional info");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 17;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        getContentPane().add(jLabel3, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -370,6 +249,11 @@ public class DoctorData extends javax.swing.JFrame {
         jPanel1.add(UpdateButton, gridBagConstraints);
 
         DeleteButton.setText("Delete");
+        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -387,34 +271,70 @@ public class DoctorData extends javax.swing.JFrame {
         gridBagConstraints.weightx = 2.0;
         getContentPane().add(jPanel1, gridBagConstraints);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setMargin(new java.awt.Insets(7, 7, 7, 7));
+        jTextArea1.setMinimumSize(new java.awt.Dimension(10, 16));
+        jScrollPane1.setViewportView(jTextArea1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 10;
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void NameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameTextFieldActionPerformed
+    private void PatientNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PatientNameTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_NameTextFieldActionPerformed
+    }//GEN-LAST:event_PatientNameTextFieldActionPerformed
 
-    private void LastNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastNameTextFieldActionPerformed
+    private void DrIdTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrIdTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_LastNameTextFieldActionPerformed
+    }//GEN-LAST:event_DrIdTextFieldActionPerformed
 
     private void InsertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InsertButtonActionPerformed
-        Doctor d = new Doctor();
-        //d.setId(8L);
-        d.setName(NameTextField.getText());
-        d.setLastName(LastNameTextField.getText());
-        d.setSpecialty(SpecialtyTextField.getText());
-        d.setTitle(TitleTextField.getText());
-        d.setEmail(EmailTextField.getText());
-        //d.setDateOfBirth(jXDatePicker1.getDate());
-        String x = OfficePhoneTextField.getText();
-        String y = ExperienceYearsTextField.getText();
-        d.setOfficeAddress(OfficeAddressTextField.getText());
-        d.setOfficePhone(new BigInteger(x));
-        d.setExperienceYears(new Short(y));
-        d.setPhoneNumber(PhonNumberTextField.getText());
-        DBManager dbm = new DBManager();
-        dbm.insert(d);
+
+        Calendar cal = Calendar.getInstance();
+        Prescription p = new Prescription();
+        Number number = 12;
+
+        BigDecimal big = new BigDecimal(number.toString());
+        //p.setId(big);
+        p.setPatientName(PatientNameTextField.getText());
+        p.setDescription(jTextArea1.getText());
+        String x = QuantityTextField.getText();
+        String y = DrIdTextField.getText();
+        p.setQuantityValue(new BigInteger(x));
+        p.setDateOfIssue(cal.getTime());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date date = null;
+        try {
+            date = formatter.parse(ValidDateTextField.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(PrescriptionData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        p.setValidDate(date);
+        p.setDoctorId(new BigInteger(y));
+        PrescriptionDBManager dbm = new PrescriptionDBManager();
+//        Doctor d  = new Doctor();
+//        //d.setId(8L);
+//        d.PatientNameTextFieldextField.getText());
+//        d.setLastName(DrIdTextField.getText());
+//        d.setSpecialty(ValidDateTextField.getText());
+//        d.setTitle(QuantityTextField.getText());
+//        d.setEmail(EmailTextField.getText());
+//        //d.setDateOfBirth(jXDatePicker1.getDate());
+//        String x = OfficePhoneTextField.getText();
+//        String y = ExperienceYearsTextField.getText();
+//        d.setOfficeAddress(OfficeAddressTextField.getText());
+//        d.setOfficePhone(new BigInteger(x));
+//        d.setExperienceYears(new Short(y));
+//        d.setPhoneNumber(PhonNumberTextField.getText());
+//        DBManager dbm = new DBManager();
+        dbm.insert(p);
         dbm.close();
         setVisible(false);
         dispose();
@@ -423,8 +343,48 @@ public class DoctorData extends javax.swing.JFrame {
     }//GEN-LAST:event_InsertButtonActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-        // TODO add your handling code here:
+        Prescription p = this.pre;
+        Calendar cal = Calendar.getInstance();
+        Number number = 12;
+
+        BigDecimal big = new BigDecimal(number.toString());
+        //p.setId(big);
+        p.setPatientName(PatientNameTextField.getText());
+        p.setDescription(jTextArea1.getText());
+        String x = QuantityTextField.getText();
+        String y = DrIdTextField.getText();
+        p.setQuantityValue(new BigInteger(x));
+        p.setDateOfIssue(cal.getTime());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date date = null;
+        try {
+            date = formatter.parse(ValidDateTextField.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(PrescriptionData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        p.setValidDate(date);
+        p.setDoctorId(new BigInteger(y));
+        PrescriptionDBManager dbm = new PrescriptionDBManager();
+        dbm.update(p);
+        dbm.close();
+        setVisible(false);
+        dispose();
+        DoctorFrame Df = new DoctorFrame(this);
+        Df.setVisible(true);
+
     }//GEN-LAST:event_UpdateButtonActionPerformed
+
+    private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
+        PrescriptionDBManager dbm = new PrescriptionDBManager();
+        dbm.delete(this.pre);
+        dbm.close();
+        setVisible(false);
+        dispose();
+        DoctorFrame Df = new DoctorFrame(this);
+        Df.setVisible(true);
+        
+    }//GEN-LAST:event_DeleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -443,56 +403,46 @@ public class DoctorData extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DoctorData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrescriptionData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DoctorData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrescriptionData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DoctorData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrescriptionData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DoctorData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PrescriptionData.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DoctorData().setVisible(true);
-
+                new PrescriptionData().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel DateOfBirthLabel;
     private javax.swing.JButton DeleteButton;
-    private javax.swing.JLabel EmailLabel;
-    private javax.swing.JTextField EmailTextField;
+    private javax.swing.JTextField DrIdTextField;
     private javax.swing.JLabel ExperenieceYearsLabel;
-    private javax.swing.JTextField ExperienceYearsTextField;
     private javax.swing.JButton InsertButton;
     private javax.swing.JLabel LastNameLabel;
-    private javax.swing.JTextField LastNameTextField;
     private javax.swing.JLabel NameLabel;
-    private javax.swing.JTextField NameTextField;
     private javax.swing.JLabel OfficeAddressLabel;
-    private javax.swing.JTextField OfficeAddressTextField;
-    private javax.swing.JLabel OfficePhoneLabel;
-    private javax.swing.JTextField OfficePhoneTextField;
-    private javax.swing.JLabel PhonNumberLabel;
-    private javax.swing.JTextField PhonNumberTextField;
-    private javax.swing.JLabel PhoneNumberLabel;
-    private javax.swing.JTextField PhoneNumberTextField;
+    private javax.swing.JTextField PatientNameTextField;
+    private javax.swing.JTextField QuantityTextField;
     private javax.swing.JLabel SpecialtyLabel;
-    private javax.swing.JTextField SpecialtyTextField;
     private javax.swing.JLabel TitleLabel;
-    private javax.swing.JTextField TitleTextField;
     private javax.swing.JButton UpdateButton;
+    private javax.swing.JTextField ValidDateTextField;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

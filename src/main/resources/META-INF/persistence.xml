@@ -18,7 +18,16 @@
       <property name="hibernate.format_sql" value="true"/>
       <property name="hibernate.use_sql_comments" value="true"/>
       <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
-
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="jdbc:oracle:thin:@212.182.25.64:1521:XEPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@212.182.25.64:1521:XE"/>
+      <property name="javax.persistence.jdbc.user" value="medisoft"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="pasmed#91"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
     </properties>
   </persistence-unit>
 </persistence>

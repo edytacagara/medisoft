@@ -5,17 +5,26 @@
  */
 package pl.medisoft.ui.doctor;
 
+import java.math.BigDecimal;
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.ui.common.BaseFrame;
+import pl.medisoft.infrastructure.doctor.PrescriptionDBManager;
+import pl.medisoft.domain.Patient.Prescription;
+
+
 
 /**
  *
  * @author Mariusz Batyra
  */
-public class DoctorFrame extends BaseFrame {
+public class DoctorFrame extends BaseFrame implements ListSelectionListener{
 
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.DOCTOR.getMessageKey());
@@ -24,8 +33,25 @@ public class DoctorFrame extends BaseFrame {
         super(parent);
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
         initComponents();
-
+        ListSelectionModel selectionModel = jTable2.getSelectionModel();
+        selectionModel.addListSelectionListener(this);
         setResizable(false);
+    }
+    public void valueChanged(ListSelectionEvent event){
+       if(event.getSource() == jTable2.getSelectionModel()&& event.getValueIsAdjusting()){
+           
+           
+           TableModel model = (TableModel) jTable2.getModel();
+           Integer i = Integer.valueOf(  model.getValueAt(jTable2.getSelectedRow(), 7).toString());
+           PrescriptionDBManager dbm = new PrescriptionDBManager();
+           Prescription p = dbm.findById(BigDecimal.valueOf(i));
+           dbm.close();
+           
+           new PrescriptionData(p).setVisible(true);
+           setVisible(false);
+           dispose();
+       }
+        
     }
 
     @Override
@@ -38,11 +64,13 @@ public class DoctorFrame extends BaseFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("MediSoftPU").createEntityManager();
+        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("jdbc:oracle:thin:@212.182.25.64:1521:XEPU").createEntityManager();
         userQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT u FROM User u");
         userList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : userQuery.getResultList();
         doctorQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT d FROM Doctor d");
         doctorList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : doctorQuery.getResultList();
+        prescriptionQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT p FROM Prescription p");
+        prescriptionList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : prescriptionQuery.getResultList();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -55,6 +83,9 @@ public class DoctorFrame extends BaseFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        WypisujRecepteButton = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
 
@@ -202,15 +233,61 @@ public class DoctorFrame extends BaseFrame {
 
         jTabbedPane3.addTab("Diagnosis", jPanel6);
 
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, prescriptionList, jTable2);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dateOfIssue}"));
+        columnBinding.setColumnName("Date Of Issue");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${description}"));
+        columnBinding.setColumnName("Description");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${medicamentId}"));
+        columnBinding.setColumnName("Medicament Id");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${quantityValue}"));
+        columnBinding.setColumnName("Quantity Value");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${validDate}"));
+        columnBinding.setColumnName("Valid Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${doctorId}"));
+        columnBinding.setColumnName("Doctor Id");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${patientId}"));
+        columnBinding.setColumnName("Patient Id");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(java.math.BigDecimal.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+
+        jScrollPane2.setViewportView(jTable2);
+
+        WypisujRecepteButton.setText("Wypisuj recepte");
+        WypisujRecepteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                WypisujRecepteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1225, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(WypisujRecepteButton)
+                .addContainerGap(1104, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1225, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 692, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(WypisujRecepteButton)
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Prescription", jPanel7);
@@ -265,7 +342,14 @@ public class DoctorFrame extends BaseFrame {
         dispose();
     }//GEN-LAST:event_addDoctorButtonActionPerformed
 
+    private void WypisujRecepteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WypisujRecepteButtonActionPerformed
+       new PrescriptionData().setVisible(true);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_WypisujRecepteButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton WypisujRecepteButton;
     private javax.swing.JButton addDoctorButton;
     private java.util.List<pl.medisoft.ui.doctor.Doctor> doctorList;
     private javax.persistence.Query doctorQuery;
@@ -281,8 +365,12 @@ public class DoctorFrame extends BaseFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private java.util.List<pl.medisoft.domain.Patient.Prescription> prescriptionList;
+    private javax.persistence.Query prescriptionQuery;
     private java.util.List<pl.medisoft.domain.user.User> userList;
     private javax.persistence.Query userQuery;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
