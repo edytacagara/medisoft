@@ -17,7 +17,7 @@ public interface VisitDao {
     
     List<Visit> findAllVisit(Long userId, String date);
     List<VisitType> findAllVisitType(); 
-    void addVisit(Visit visit);
+    boolean addVisit(Visit visit);
+    Long getNextValueSeq();
 
-    
 }

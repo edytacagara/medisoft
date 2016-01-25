@@ -49,17 +49,33 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
         return users;
     }
 
+    @Override
     public List<User> findAllEmployees() {
         List<User> users = new ArrayList();
         users = this.getEntityManager().createQuery(UserDaoJpa.FIND_ALL_EMPLOYEES).getResultList();
         return users;
     }
-    
-    public void addUser(User user){
+
+    @Override
+    public void addUser(User user) {
         this.getEntityManager().getTransaction().begin();
         this.getEntityManager().persist(user);
         this.getEntityManager().getTransaction().commit();
     }
 
-      
+    @Override
+    public boolean updateUser(User user) {
+        try {
+             this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().merge(user);
+        this.getEntityManager().getTransaction().commit();
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            getEntityManager().getTransaction().rollback();           
+            return false;
+        }
+       
+    }
+
 }

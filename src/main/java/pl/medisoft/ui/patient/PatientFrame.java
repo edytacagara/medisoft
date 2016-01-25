@@ -25,6 +25,7 @@ import pl.medisoft.ui.doctor.Doctor;
 import java.util.Calendar;
 import java.util.Date;
 import javafx.scene.chart.PieChart;
+import javax.swing.JOptionPane;
 import pl.medisoft.domain.Patient.Visit;
 /**
  *
@@ -66,14 +67,11 @@ public class PatientFrame extends BaseFrame {
     public void customize() {
         lblFirstName.setText(IdentityProvider.identity.getNameAndSurname());
         user = userDaoJpa.findById(IdentityProvider.identity.getId());
-
-        lblCity.setText(messages.get("app.user.city") + ":");
-        lblCountry.setText(messages.get("app.user.country") + ":");
-        lblEmail.setText(messages.get("app.user.email") + ":");
-        lblHouseNumber.setText(messages.get("app.user.houseNumber") + ":");
-        lblPesel.setText(messages.get("app.user.pesel") + ":");
-        lblPostalCode.setText(messages.get("app.user.postalCode") + ":");
-        lblStreet.setText(messages.get("app.user.street") + ":");
+setLabelName();
+     
+        
+        
+        
         //lblReservationHeader.setText(messages.get("app.patient.reservationHeader"));
         edtCity.setText(user.getCity());
         edtCountry.setText(user.getCountry());
@@ -123,6 +121,8 @@ public class PatientFrame extends BaseFrame {
         panelPatientInfo = new javax.swing.JPanel();
         panel1 = new java.awt.Panel();
         lblFirstName = new java.awt.Label();
+        textField1 = new java.awt.TextField();
+        textField2 = new java.awt.TextField();
         lblPesel = new javax.swing.JLabel();
         lblCity = new javax.swing.JLabel();
         lblPostalCode = new javax.swing.JLabel();
@@ -141,16 +141,15 @@ public class PatientFrame extends BaseFrame {
         btnSave = new javax.swing.JButton();
         lblReklama = new java.awt.Label();
         panelEReservation = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblERezerwacjeHeader = new javax.swing.JLabel();
         cbMonth = new javax.swing.JComboBox<>();
         jComboBoxWyborLekarza = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
+        lblChoseDate = new javax.swing.JLabel();
         jComboBoxRodzajZabiegu1 = new javax.swing.JComboBox<>();
         cbYear = new javax.swing.JComboBox<>();
         cbHour = new javax.swing.JComboBox<>();
         cbDay = new javax.swing.JComboBox<>();
         btnAddVisit = new java.awt.Button();
-        label1 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -164,6 +163,11 @@ public class PatientFrame extends BaseFrame {
         lblFirstName.setFont(new java.awt.Font("Corbel", 0, 24)); // NOI18N
         lblFirstName.setText("label1");
 
+        textField1.setEditable(false);
+        textField1.setText("textField1");
+
+        textField2.setText("textField2");
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -175,7 +179,7 @@ public class PatientFrame extends BaseFrame {
             .addGroup(panel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(30, 30, 30))
         );
 
         lblPesel.setBackground(new java.awt.Color(153, 255, 255));
@@ -202,45 +206,44 @@ public class PatientFrame extends BaseFrame {
         lblEmail.setText("E-mail");
 
         edtPesel.setEditable(false);
+        edtPesel.setBackground(new java.awt.Color(255, 255, 255));
         edtPesel.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtPesel.setText("jTextField1");
-        edtPesel.setBorder(null);
+        edtPesel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        edtCity.setEditable(false);
-        edtCity.setBackground(new java.awt.Color(255, 255, 255));
         edtCity.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtCity.setText("jTextField1");
-        edtCity.setBorder(null);
+        edtCity.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         edtPostalCode.setEditable(false);
         edtPostalCode.setBackground(new java.awt.Color(255, 255, 255));
         edtPostalCode.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtPostalCode.setText("jTextField1");
-        edtPostalCode.setBorder(null);
+        edtPostalCode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         edtCountry.setEditable(false);
         edtCountry.setBackground(new java.awt.Color(255, 255, 255));
         edtCountry.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtCountry.setText("jTextField1");
-        edtCountry.setBorder(null);
+        edtCountry.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         edtStreet.setEditable(false);
         edtStreet.setBackground(new java.awt.Color(255, 255, 255));
         edtStreet.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtStreet.setText("jTextField1");
-        edtStreet.setBorder(null);
+        edtStreet.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         edtHouseNumber.setEditable(false);
         edtHouseNumber.setBackground(new java.awt.Color(255, 255, 255));
         edtHouseNumber.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtHouseNumber.setText("jTextField1");
-        edtHouseNumber.setBorder(null);
+        edtHouseNumber.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         edtEmail.setEditable(false);
         edtEmail.setBackground(new java.awt.Color(255, 255, 255));
         edtEmail.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         edtEmail.setText("jTextField1");
-        edtEmail.setBorder(null);
+        edtEmail.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         btnEdit.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         btnEdit.setText("Edytuj");
@@ -348,7 +351,7 @@ public class PatientFrame extends BaseFrame {
                 .addGroup(panelPatientInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEdit)
                     .addComponent(btnSave))
-                .addGap(44, 44, 44))
+                .addGap(49, 49, 49))
         );
 
         tabPaneReservation.addTab("Dane o pacjencie", panelPatientInfo);
@@ -357,9 +360,9 @@ public class PatientFrame extends BaseFrame {
         panelEReservation.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
         panelEReservation.setPreferredSize(new java.awt.Dimension(385, 398));
 
-        jLabel1.setFont(new java.awt.Font("Corbel", 0, 18)); // NOI18N
-        jLabel1.setText("Szukaj badania/zabiegu lub lekarza");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        lblERezerwacjeHeader.setFont(new java.awt.Font("Corbel", 0, 18)); // NOI18N
+        lblERezerwacjeHeader.setText("Szukaj badania/zabiegu lub lekarza");
+        lblERezerwacjeHeader.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         cbMonth.setBackground(new java.awt.Color(153, 255, 255));
         cbMonth.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
@@ -377,8 +380,8 @@ public class PatientFrame extends BaseFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
-        jLabel5.setText("Wybierz termin wizyty");
+        lblChoseDate.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
+        lblChoseDate.setText("Wybierz termin wizyty");
 
         jComboBoxRodzajZabiegu1.setBackground(new java.awt.Color(153, 255, 255));
         jComboBoxRodzajZabiegu1.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
@@ -419,8 +422,6 @@ public class PatientFrame extends BaseFrame {
             }
         });
 
-        label1.setText("label1");
-
         javax.swing.GroupLayout panelEReservationLayout = new javax.swing.GroupLayout(panelEReservation);
         panelEReservation.setLayout(panelEReservationLayout);
         panelEReservationLayout.setHorizontalGroup(
@@ -428,42 +429,40 @@ public class PatientFrame extends BaseFrame {
             .addGroup(panelEReservationLayout.createSequentialGroup()
                 .addGap(0, 77, Short.MAX_VALUE)
                 .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(panelEReservationLayout.createSequentialGroup()
-                            .addGap(87, 87, 87)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(panelEReservationLayout.createSequentialGroup()
-                            .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(panelEReservationLayout.createSequentialGroup()
-                                    .addComponent(cbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cbMonth, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jComboBoxRodzajZabiegu1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(18, 18, 18)
-                            .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jComboBoxWyborLekarza, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(panelEReservationLayout.createSequentialGroup()
-                                    .addComponent(cbDay, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cbHour, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(panelEReservationLayout.createSequentialGroup()
-                            .addGap(190, 190, 190)
-                            .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(label1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblChoseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelEReservationLayout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addComponent(lblERezerwacjeHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelEReservationLayout.createSequentialGroup()
+                        .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(panelEReservationLayout.createSequentialGroup()
+                                .addComponent(cbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbMonth, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jComboBoxRodzajZabiegu1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxWyborLekarza, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelEReservationLayout.createSequentialGroup()
+                                .addComponent(cbDay, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbHour, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelEReservationLayout.createSequentialGroup()
+                        .addGap(190, 190, 190)
+                        .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(76, 76, 76))
         );
         panelEReservationLayout.setVerticalGroup(
             panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelEReservationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(lblERezerwacjeHeader)
                 .addGap(27, 27, 27)
                 .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxWyborLekarza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxRodzajZabiegu1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addComponent(jLabel5)
+                .addComponent(lblChoseDate)
                 .addGap(27, 27, 27)
                 .addGroup(panelEReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -472,15 +471,13 @@ public class PatientFrame extends BaseFrame {
                     .addComponent(cbDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(47, 47, 47)
                 .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
-        jLabel1.getAccessibleContext().setAccessibleName("lblErezerwacjeTytul");
+        lblERezerwacjeHeader.getAccessibleContext().setAccessibleName("lblErezerwacjeTytul");
         cbMonth.getAccessibleContext().setAccessibleName("");
         jComboBoxWyborLekarza.getAccessibleContext().setAccessibleName("cbWyborLekarza");
-        jLabel5.getAccessibleContext().setAccessibleName("lblTerminWizyty");
+        lblChoseDate.getAccessibleContext().setAccessibleName("lblTerminWizyty");
         btnAddVisit.getAccessibleContext().setAccessibleName("Rezerwuj");
 
         tabPaneReservation.addTab("e-Rezerwacje", panelEReservation);
@@ -512,8 +509,21 @@ public class PatientFrame extends BaseFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-
-        
+       user.setCity(edtCity.getText());
+       user.setCountry(edtCountry.getText());
+       user.setPostalCode(edtPostalCode.getText());
+       user.setStreet(edtStreet.getText());
+       user.setHouseNumber(edtHouseNumber.getText());
+       user.setEmail(edtEmail.getText());
+       boolean result = false;
+       
+       result = userDaoJpa.updateUser(user);
+       
+          if (result) {
+            JOptionPane.showMessageDialog(this, messages.get("app.notes.saveOk"), "!", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, messages.get("app.notes.saveError"), "!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void cbMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMonthActionPerformed
@@ -554,8 +564,15 @@ public class PatientFrame extends BaseFrame {
          visit.setPatient(user);
          visit.setVisitType(visitType);
          visit.setVisitDate(visitDate);
-         visitDaoJpa.addVisit(visit);
-         label1.setText(visitDate.toString());
+         boolean result = false;
+        result =  visitDaoJpa.addVisit(visit);
+         if (result) {
+            JOptionPane.showMessageDialog(this, messages.get("app.user.saveOk"), "!", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, messages.get("app.notes.saveError"), "!", JOptionPane.ERROR_MESSAGE);
+        }
+
+        
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -575,11 +592,10 @@ public class PatientFrame extends BaseFrame {
     private javax.swing.JTextField edtStreet;
     private javax.swing.JComboBox<VisitType> jComboBoxRodzajZabiegu1;
     private javax.swing.JComboBox<Doctor> jComboBoxWyborLekarza;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel5;
-    private java.awt.Label label1;
+    private javax.swing.JLabel lblChoseDate;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblCountry;
+    private javax.swing.JLabel lblERezerwacjeHeader;
     private javax.swing.JLabel lblEmail;
     private java.awt.Label lblFirstName;
     private javax.swing.JLabel lblHouseNumber;
@@ -591,6 +607,8 @@ public class PatientFrame extends BaseFrame {
     private javax.swing.JPanel panelEReservation;
     private javax.swing.JPanel panelPatientInfo;
     private javax.swing.JTabbedPane tabPaneReservation;
+    private java.awt.TextField textField1;
+    private java.awt.TextField textField2;
     // End of variables declaration//GEN-END:variables
 
     private void initDateComboBox() {
@@ -608,6 +626,7 @@ public class PatientFrame extends BaseFrame {
             cbYear.addItem(String.valueOf(year+i));
         }
         cbYear.setSelectedIndex(0);
+        visitDate.setYear(year);
         
         cbMonth.removeAllItems();
         for (int i = 0; i < 12; i++) {
@@ -615,7 +634,8 @@ public class PatientFrame extends BaseFrame {
             cbMonth.addItem(messages.get(monthNameKey));
         }
         cbMonth.setSelectedIndex(month);
-        
+        visitDate.setYear(year);
+
         cbDay.removeAllItems();
         int selectedIndex = cbMonth.getSelectedIndex();
         int numberOfDay = NUMBER_OF_DAY[selectedIndex];
@@ -633,12 +653,24 @@ public class PatientFrame extends BaseFrame {
     }
 
     private void setToday() {
-        Date date = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        cbMonth.setSelectedIndex(month);
-        cbDay.setSelectedIndex(day - 1);    }
+        cal.setTime(visitDate);
+        visitDate.setMinutes(0);
+        visitDate.setSeconds(0);
+    }
+
+    private void setLabelName() {
+        lblCity.setText(messages.get("app.user.city") + ":");
+        lblCountry.setText(messages.get("app.user.country") + ":");
+        lblEmail.setText(messages.get("app.user.email") + ":");
+        lblHouseNumber.setText(messages.get("app.user.houseNumber") + ":");
+        lblPesel.setText(messages.get("app.user.pesel") + ":");
+        lblPostalCode.setText(messages.get("app.user.postalCode") + ":");
+        lblStreet.setText(messages.get("app.user.street") + ":"); 
+       // lblChoseDate.setText(messages.get("app.user.street"))
+       lblERezerwacjeHeader.setText(messages.get(" app.patient.reservationHeader")); 
+       
+    
+    }
 
 }

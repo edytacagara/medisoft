@@ -20,5 +20,5 @@ public interface UserDao {
     List<User> findAll();
     List<User> findAllEmployees();
     void addUser(User user);
-
+    boolean updateUser(User user);
 }

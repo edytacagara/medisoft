@@ -10,10 +10,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,7 +32,6 @@ import pl.medisoft.ui.doctor.Doctor;
 public class Visit implements Serializable  {
 
     @Id
-    @GeneratedValue
     private long id;
     
     @JoinColumn(name = "VISIT_TYPE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
@@ -90,9 +91,7 @@ public class Visit implements Serializable  {
 
     public void setPatient(User patient) {
         this.patient = patient;
-    }
-
-  
+    }  
 
     public Doctor getDoctor() {
         return doctor;
