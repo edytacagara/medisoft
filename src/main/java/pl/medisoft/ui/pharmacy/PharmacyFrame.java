@@ -24,12 +24,14 @@ public class PharmacyFrame extends BaseFrame {
         super(parent);
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
         initComponents();
-
+        customize();
         setResizable(false);
     }
 
     @Override
     public void customize() {
+        addMedicamentButton.setText(messages.get("app.pharmacy.addMedicament"));
+        updateStateButton.setText(messages.get("app.pharmacy.updateState"));
 
     }
     
@@ -37,21 +39,70 @@ public class PharmacyFrame extends BaseFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jInternalFrame1 = new javax.swing.JInternalFrame();
+        addMedicamentButton = new javax.swing.JButton();
+        updateStateButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        jInternalFrame1.setVisible(true);
+
+        addMedicamentButton.setText("jButton1");
+        addMedicamentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMedicamentButtonActionPerformed(evt);
+            }
+        });
+
+        updateStateButton.setText("jButton1");
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addMedicamentButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(updateStateButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addComponent(addMedicamentButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updateStateButton)
+                .addGap(0, 222, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 291, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jInternalFrame1)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addMedicamentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedicamentButtonActionPerformed
+        // TODO add your handling code here:
+        AddMedicament add = new AddMedicament(this);
+        add.pack();
+        add.setVisible(true);
+        
+    }//GEN-LAST:event_addMedicamentButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addMedicamentButton;
+    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JButton updateStateButton;
     // End of variables declaration//GEN-END:variables
 }
