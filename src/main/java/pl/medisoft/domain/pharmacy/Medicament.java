@@ -8,6 +8,7 @@ package pl.medisoft.domain.pharmacy;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,6 +25,7 @@ public class Medicament implements Serializable {
    
     @Id
     @Column(name = "ID")
+    @GeneratedValue
     private Long id;
     @Column(name = "MEDICAMENT_NAME")
     private String medicamentName;
