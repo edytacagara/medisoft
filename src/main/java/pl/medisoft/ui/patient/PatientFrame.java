@@ -5,6 +5,7 @@
  */
 package pl.medisoft.ui.patient;
 
+import pl.medisoft.application.user.calendar.CalendarBean;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,7 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import javafx.scene.chart.PieChart;
 import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
 import pl.medisoft.domain.Patient.Visit;
+
 /**
  *
  * @author Kamil Ochnio
@@ -46,12 +49,14 @@ public class PatientFrame extends BaseFrame {
     private static final String MONTH_MSG_PREFIX = "app.calendar.month";
     private static final int[] NUMBER_OF_DAY = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private static final String PREFIX = "app.calendar.";
+    private static final String[] HEADERS = {"lp", "doctorName", "patientName", "visitDate", "visitType"};
+
     private Doctor doctor;
     private VisitType visitType;
     private Visit visit;
     private Date visitDate = new Date();
+    private CalendarBean calendarBean = new CalendarBean();
 
-    
     public PatientFrame(final JFrame parent) {
         super(parent);
         this.parent = parent;
@@ -67,11 +72,8 @@ public class PatientFrame extends BaseFrame {
     public void customize() {
         lblFirstName.setText(IdentityProvider.identity.getNameAndSurname());
         user = userDaoJpa.findById(IdentityProvider.identity.getId());
-setLabelName();
-     
-        
-        
-        
+        setLabelName();
+
         //lblReservationHeader.setText(messages.get("app.patient.reservationHeader"));
         edtCity.setText(user.getCity());
         edtCountry.setText(user.getCountry());
@@ -150,6 +152,12 @@ setLabelName();
         cbHour = new javax.swing.JComboBox<>();
         cbDay = new javax.swing.JComboBox<>();
         btnAddVisit = new java.awt.Button();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        calendarTable = new javax.swing.JTable();
+        monthComboBox = new javax.swing.JComboBox();
+        dayComboBox = new javax.swing.JComboBox();
+        showButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -482,6 +490,72 @@ setLabelName();
 
         tabPaneReservation.addTab("e-Rezerwacje", panelEReservation);
 
+        calendarTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Time", "Description"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(calendarTable);
+
+        monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        monthComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                monthComboBoxActionPerformed(evt);
+            }
+        });
+
+        dayComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        showButton.setText("Pokaż");
+        showButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(dayComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(showButton)
+                        .addGap(0, 302, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dayComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showButton))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabPaneReservation.addTab("Moje wizyty", jPanel1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -509,17 +583,17 @@ setLabelName();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-       user.setCity(edtCity.getText());
-       user.setCountry(edtCountry.getText());
-       user.setPostalCode(edtPostalCode.getText());
-       user.setStreet(edtStreet.getText());
-       user.setHouseNumber(edtHouseNumber.getText());
-       user.setEmail(edtEmail.getText());
-       boolean result = false;
-       
-       result = userDaoJpa.updateUser(user);
-       
-          if (result) {
+        user.setCity(edtCity.getText());
+        user.setCountry(edtCountry.getText());
+        user.setPostalCode(edtPostalCode.getText());
+        user.setStreet(edtStreet.getText());
+        user.setHouseNumber(edtHouseNumber.getText());
+        user.setEmail(edtEmail.getText());
+        boolean result = false;
+
+        result = userDaoJpa.updateUser(user);
+
+        if (result) {
             JOptionPane.showMessageDialog(this, messages.get("app.notes.saveOk"), "!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, messages.get("app.notes.saveError"), "!", JOptionPane.ERROR_MESSAGE);
@@ -534,20 +608,20 @@ setLabelName();
         if (jComboBoxWyborLekarza.getSelectedIndex() == -1) {
 
         } else {
-             doctor = (Doctor) jComboBoxWyborLekarza.getSelectedItem();
+            doctor = (Doctor) jComboBoxWyborLekarza.getSelectedItem();
         }
     }//GEN-LAST:event_jComboBoxWyborLekarzaActionPerformed
 
     private void jComboBoxRodzajZabiegu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxRodzajZabiegu1ActionPerformed
-        if(jComboBoxRodzajZabiegu1.getSelectedIndex()==-1){
-            
-        }else{
-            visitType=(VisitType)jComboBoxRodzajZabiegu1.getSelectedItem();
-        }            
+        if (jComboBoxRodzajZabiegu1.getSelectedIndex() == -1) {
+
+        } else {
+            visitType = (VisitType) jComboBoxRodzajZabiegu1.getSelectedItem();
+        }
     }//GEN-LAST:event_jComboBoxRodzajZabiegu1ActionPerformed
 
     private void cbYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbYearActionPerformed
-         visitDate.setYear(2016-1900+cbYear.getSelectedIndex());
+        visitDate.setYear(2016 - 1900 + cbYear.getSelectedIndex());
     }//GEN-LAST:event_cbYearActionPerformed
 
     private void cbHourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbHourActionPerformed
@@ -555,34 +629,58 @@ setLabelName();
     }//GEN-LAST:event_cbHourActionPerformed
 
     private void cbDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDayActionPerformed
-       visitDate.setDate(cbDay.getSelectedIndex()+1);
+        visitDate.setDate(cbDay.getSelectedIndex() + 1);
     }//GEN-LAST:event_cbDayActionPerformed
 
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
-         visit=new Visit();
-         visit.setDoctor(doctor);
-         visit.setPatient(user);
-         visit.setVisitType(visitType);
-         visit.setVisitDate(visitDate);
-         boolean result = false;
-        result =  visitDaoJpa.addVisit(visit);
-         if (result) {
+        visit = new Visit();
+        doctor.setId(2L);
+        visit.setDoctor(doctor);
+        visit.setPatient(user);
+        visit.setVisitType(visitType);
+        visit.setVisitDate(visitDate);
+        visit.setId(2L);
+        boolean result = false;
+        result = visitDaoJpa.addVisit(visit);
+        if (result) {
             JOptionPane.showMessageDialog(this, messages.get("app.user.saveOk"), "!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, messages.get("app.notes.saveError"), "!", JOptionPane.ERROR_MESSAGE);
         }
 
-        
+
     }//GEN-LAST:event_btnAddVisitActionPerformed
+
+    private void showButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showButtonActionPerformed
+        int day = dayComboBox.getSelectedIndex() + 1;
+        int month = monthComboBox.getSelectedIndex() + 1;
+        String dayStr = String.valueOf(day);
+        String monthStr = String.valueOf(month);
+        if (day < 10) {
+            dayStr = String.valueOf(0) + dayStr;
+        }
+        if (month < 10) {
+            monthStr = String.valueOf(0) + monthStr;
+        }
+        String selectedDate = "2016-" + monthStr + "-" + dayStr;
+        List<Visit> allVisit = calendarBean.findAllVisit(selectedDate);
+        initTable(allVisit);
+    }//GEN-LAST:event_showButtonActionPerformed
+
+    private void monthComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_monthComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button btnAddVisit;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnSave;
+    private javax.swing.JTable calendarTable;
     private javax.swing.JComboBox cbDay;
     private javax.swing.JComboBox cbHour;
     private javax.swing.JComboBox cbMonth;
     private javax.swing.JComboBox cbYear;
+    private javax.swing.JComboBox dayComboBox;
     private javax.swing.JTextField edtCity;
     private javax.swing.JTextField edtCountry;
     private javax.swing.JTextField edtEmail;
@@ -592,6 +690,8 @@ setLabelName();
     private javax.swing.JTextField edtStreet;
     private javax.swing.JComboBox<VisitType> jComboBoxRodzajZabiegu1;
     private javax.swing.JComboBox<Doctor> jComboBoxWyborLekarza;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblChoseDate;
     private javax.swing.JLabel lblCity;
     private javax.swing.JLabel lblCountry;
@@ -603,31 +703,42 @@ setLabelName();
     private javax.swing.JLabel lblPostalCode;
     private java.awt.Label lblReklama;
     private javax.swing.JLabel lblStreet;
+    private javax.swing.JComboBox monthComboBox;
     private java.awt.Panel panel1;
     private javax.swing.JPanel panelEReservation;
     private javax.swing.JPanel panelPatientInfo;
+    private javax.swing.JButton showButton;
     private javax.swing.JTabbedPane tabPaneReservation;
     private java.awt.TextField textField1;
     private java.awt.TextField textField2;
     // End of variables declaration//GEN-END:variables
 
+    private void initDayCombo() {
+        dayComboBox.removeAllItems();
+        int selectedIndex = monthComboBox.getSelectedIndex();
+        int numberOfDay = NUMBER_OF_DAY[selectedIndex];
+        for (int i = 0; i < numberOfDay; i++) {
+            dayComboBox.addItem(String.valueOf(i + 1));
+        }
+    }
+
     private void initDateComboBox() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        int year = cal.get(Calendar.YEAR);        
-        int month = cal.get(Calendar.MONTH);        
-        int day = cal.get(Calendar.DATE);        
-        int Hour = cal.get(Calendar.HOUR_OF_DAY);    
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DATE);
+        int Hour = cal.get(Calendar.HOUR_OF_DAY);
         //int minute = cal.get(Calendar.MINUTE);    
 
         cbYear.removeAllItems();
         for (int i = 0; i < 10; i++) {
-            cbYear.addItem(String.valueOf(year+i));
+            cbYear.addItem(String.valueOf(year + i));
         }
         cbYear.setSelectedIndex(0);
         visitDate.setYear(year);
-        
+
         cbMonth.removeAllItems();
         for (int i = 0; i < 12; i++) {
             String monthNameKey = MONTH_MSG_PREFIX + String.valueOf(i + 1);
@@ -643,13 +754,28 @@ setLabelName();
             cbDay.addItem(String.valueOf(i + 1));
         }
         cbDay.setSelectedItem(day);
-        
+
         cbHour.removeAllItems();
         for (int i = 0; i < 24; i++) {
-            
-            cbHour.addItem(String.valueOf(i)+":00");
-        } 
+
+            cbHour.addItem(String.valueOf(i) + ":00");
+        }
         cbHour.setSelectedIndex(Hour);
+
+        monthComboBox.removeAllItems();
+        for (int i = 0; i < 12; i++) {
+            String monthNameKey = MONTH_MSG_PREFIX + String.valueOf(i + 1);
+            monthComboBox.addItem(messages.get(monthNameKey));
+        }
+        dayComboBox.removeAllItems();
+
+        selectedIndex = monthComboBox.getSelectedIndex();
+        numberOfDay = NUMBER_OF_DAY[selectedIndex];
+        for (int i = 0; i < numberOfDay; i++) {
+            dayComboBox.addItem(String.valueOf(i + 1));
+        }
+        monthComboBox.setSelectedIndex(month);
+        dayComboBox.setSelectedIndex(day - 1);
     }
 
     private void setToday() {
@@ -666,11 +792,49 @@ setLabelName();
         lblHouseNumber.setText(messages.get("app.user.houseNumber") + ":");
         lblPesel.setText(messages.get("app.user.pesel") + ":");
         lblPostalCode.setText(messages.get("app.user.postalCode") + ":");
-        lblStreet.setText(messages.get("app.user.street") + ":"); 
-       // lblChoseDate.setText(messages.get("app.user.street"))
-       lblERezerwacjeHeader.setText(messages.get(" app.patient.reservationHeader")); 
-       
-    
+        lblStreet.setText(messages.get("app.user.street") + ":");
+        // lblChoseDate.setText(messages.get("app.user.street"))
+        lblERezerwacjeHeader.setText(messages.get(" app.patient.reservationHeader"));
+        btnAddVisit.setLabel(messages.get("app.patient.addVisit"));
+
     }
 
+    private void initTable(final List<Visit> list) {
+        calendarTable.setModel(new AbstractTableModel() {
+
+            @Override
+            public int getRowCount() {
+                return list.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return 5;
+            }
+
+            @Override
+            public String getValueAt(int rowIndex, int columnIndex) {
+                Visit v = list.get(rowIndex);
+                switch (columnIndex) {
+                    case 0:
+                        return String.valueOf(rowIndex + 1);
+                    case 1:
+                        return v.getDoctor().getName() + " " + v.getDoctor().getLastName();
+                    case 2:
+                        return v.getPatient().getName() + " " + v.getPatient().getSurname();
+                    case 3:
+                        return v.getVisitDate().toString();
+                    case 4:
+                        return v.getVisitType().getDescription();
+                    default:
+                        return "error";
+                }
+            }
+
+            @Override
+            public String getColumnName(int columnIndex) {
+                return messages.get(PREFIX + HEADERS[columnIndex]);
+            }
+        });
+    }
 }
