@@ -24,6 +24,8 @@ public class VisitDaoJpa extends BasicDaoJpa implements VisitDao {
             + " and TO_CHAR(visit.visitDate, 'yyyy-mm-dd') = :date"
             + " order by visit.visitDate asc";
     private static final String NEXT_VAL = "select VISIT_ID_SEQ.nextval  from dual";
+    private static final String ADD_VISIT = "insert into visit (id,visit_date,doctor_id,patient_id,visit_type_id) values(:id, :visitDate, :doctorId, :patientId, :visitTypeId) ";
+
 
     @Override
     public List<Visit> findAllVisit(Long userId, String date) {
@@ -43,7 +45,13 @@ public class VisitDaoJpa extends BasicDaoJpa implements VisitDao {
     public boolean addVisit(Visit visit) {
         try {
             getEntityManager().getTransaction().begin();            
-            getEntityManager().persist(visit);
+            getEntityManager().createNativeQuery(ADD_VISIT)
+                    .setParameter("id", getNextValueSeq())
+                    .setParameter("visitDate",visit.getVisitDate())
+                    .setParameter("doctorId",visit.getDoctor().getId())
+                    .setParameter("patientId",visit.getPatient().getId())
+                    .setParameter("visitTypeId",visit.getVisitType().getId()).executeUpdate();
+                    
             getEntityManager().getTransaction().commit();
             return true;
         } catch(Exception e) {

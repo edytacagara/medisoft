@@ -5,6 +5,8 @@
  */
 package pl.medisoft.ui.patient;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import pl.medisoft.application.user.calendar.CalendarBean;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,8 @@ import pl.medisoft.ui.common.BaseFrame;
 import pl.medisoft.ui.doctor.Doctor;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.chart.PieChart;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
@@ -621,7 +625,8 @@ public class PatientFrame extends BaseFrame {
     }//GEN-LAST:event_jComboBoxRodzajZabiegu1ActionPerformed
 
     private void cbYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbYearActionPerformed
-        visitDate.setYear(2016 - 1900 + cbYear.getSelectedIndex());
+
+        visitDate.setYear(2016 + cbYear.getSelectedIndex());
     }//GEN-LAST:event_cbYearActionPerformed
 
     private void cbHourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbHourActionPerformed
@@ -633,13 +638,26 @@ public class PatientFrame extends BaseFrame {
     }//GEN-LAST:event_cbDayActionPerformed
 
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
+
         visit = new Visit();
-        doctor.setId(2L);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(visitDate);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DATE);
+        int Hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);    
+        String date_s = year + "-" + month + "-" + day + " " + Hour + ":" + month;
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            Date date = dt.parse(date_s);
+            visit.setVisitDate(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(PatientFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         visit.setDoctor(doctor);
         visit.setPatient(user);
         visit.setVisitType(visitType);
-        visit.setVisitDate(visitDate);
-        visit.setId(2L);
         boolean result = false;
         result = visitDaoJpa.addVisit(visit);
         if (result) {
