@@ -17,7 +17,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
  */
 public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
 
-    private static final String FIND_ALL = "Select m From MEDICAMENT m";
+    private static final String FIND_ALL = "select m from Medicament m";
     
     
     @Override

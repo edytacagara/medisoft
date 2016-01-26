@@ -5,10 +5,15 @@
  */
 package pl.medisoft.ui.pharmacy;
 
+import com.sun.net.httpserver.Headers;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.table.AbstractTableModel;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
+import pl.medisoft.domain.pharmacy.Medicament;
+import pl.medisoft.infrastructure.pharmacy.MedicamentsDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
 
 /**
@@ -19,20 +24,63 @@ public class PharmacyFrame extends BaseFrame {
 
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.PHARMACY.getMessageKey());
-
+    private static final String[] HEADERS = {"lp", "name", "wskazanie","pakowanie","ilosc","cena"};
+    private MedicamentsDaoJpa medJpa = new MedicamentsDaoJpa();
+    private List<Medicament> listMed;
+    private final JFrame parent;
     public PharmacyFrame(final JFrame parent) {
         super(parent);
+        this.parent = parent;
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
+        
         initComponents();
         customize();
         setResizable(false);
+        
+        
     }
 
     @Override
     public void customize() {
+        this.listMed = medJpa.findALL();
         addMedicamentButton.setText(messages.get("app.pharmacy.addMedicament"));
         updateStateButton.setText(messages.get("app.pharmacy.updateState"));
+        jTable1.setModel(new AbstractTableModel() {
+            @Override
+            public int getRowCount() {
+                return listMed.size();
+            }
 
+            @Override
+            public int getColumnCount() {
+                return HEADERS.length;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                switch (columnIndex) {
+                    case 0:
+                        return rowIndex + 1;
+                    case 1:
+                        return listMed.get(rowIndex).getMedicamentName();
+                    case 2:
+                        return listMed.get(rowIndex).getDisease();
+                    case 3:
+                        return listMed.get(rowIndex).getMeasure();
+                    case 4:
+                        return listMed.get(rowIndex).getAmount();
+                    case 5:
+                        return listMed.get(rowIndex).getPrice();
+                    default:
+                        throw new UnsupportedOperationException("Column index: " + columnIndex);
+                }
+            }
+            
+            @Override
+            public String getColumnName(int columnIndex) {
+                return messages.get(HEADERS[columnIndex]);
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
@@ -80,17 +128,17 @@ public class PharmacyFrame extends BaseFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Nazwa", "Wskazanie", "Pakowanie", "Ilość", "Cena"
+                "Lp.", "Nazwa", "Wskazanie", "Pakowanie", "Ilość", "Cena"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {

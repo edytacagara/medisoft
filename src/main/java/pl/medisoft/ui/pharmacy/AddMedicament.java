@@ -23,11 +23,12 @@ public class AddMedicament extends BaseFrame {
     private final String MODULE_NAME = messages.get(ModuleEnum.PHARMACY.getMessageKey());
     
     private Medicament medicament;
-    private MedicamentsDaoJpa medicamentJpa;
-    
+    private MedicamentsDaoJpa medicamentJpa = new MedicamentsDaoJpa();
+    private final JFrame parent;
     
     public AddMedicament(final JFrame parent) {
         super(parent);
+        this.parent = parent;
         initComponents();
         insertButton.setText(messages.get("app.pharmacy.add"));
         setResizable(false);
@@ -50,7 +51,7 @@ public class AddMedicament extends BaseFrame {
         cenaInput = new javax.swing.JTextField();
         insertButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Nazwa:");
 
@@ -156,7 +157,7 @@ public class AddMedicament extends BaseFrame {
         medicament.setPrice(Double.parseDouble(cenaInput.getText()));
         
         medicamentJpa.addMedicament(medicament);
-        
+        ((BaseFrame) parent).customize();
 
     }//GEN-LAST:event_insertButtonActionPerformed
 
