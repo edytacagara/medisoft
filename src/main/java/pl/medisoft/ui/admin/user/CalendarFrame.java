@@ -7,24 +7,34 @@ package pl.medisoft.ui.admin.user;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.application.user.calendar.CalendarBean;
+import pl.medisoft.domain.Patient.Prescription;
 import pl.medisoft.domain.Patient.Visit;
+import pl.medisoft.domain.user.User;
 import pl.medisoft.ui.common.BaseFrame;
+import pl.medisoft.ui.doctor.DBManager;
+import pl.medisoft.ui.doctor.PatientHistoryFrame;
+import pl.medisoft.ui.doctor.PrescriptionData;
 
 /**
  *
  * @author Mariusz Batyra
  */
-public class CalendarFrame extends BaseFrame {
+public class CalendarFrame extends BaseFrame implements ListSelectionListener{
 
     private static final String MONTH_MSG_PREFIX = "app.calendar.month";
     private static final int[] NUMBER_OF_DAY = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -42,6 +52,8 @@ public class CalendarFrame extends BaseFrame {
         initComponents();
         customize();
         setResizable(false);
+        ListSelectionModel selectionModel = calendarTable.getSelectionModel();
+        selectionModel.addListSelectionListener(this);
         monthComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,6 +62,26 @@ public class CalendarFrame extends BaseFrame {
         });
         initTable(new ArrayList<>());
         setToday();
+    }
+    
+     @Override
+    public void valueChanged(ListSelectionEvent event) {
+        if (event.getSource() == calendarTable.getSelectionModel() && event.getValueIsAdjusting()) {
+
+            TableModel model = (TableModel) calendarTable.getModel();
+            long i = Integer.valueOf(model.getValueAt(calendarTable.getSelectedRow(), 0).toString());
+            
+            DBManager dbm = new DBManager();
+            Visit v = dbm.findByIdVisit(i);
+            User u = v.getPatient();
+            long a =u.getId();
+            new PatientHistoryFrame(a,i).setVisible(true);
+            setVisible(false);
+            dispose();
+
+            //dbm.close();
+        }
+
     }
 
     private void initMonthCombo() {
