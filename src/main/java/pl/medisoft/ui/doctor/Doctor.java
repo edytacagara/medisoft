@@ -18,11 +18,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import pl.medisoft.domain.user.User;
 
 
 /**
@@ -79,13 +81,15 @@ public class Doctor implements Serializable {
     private String lastName;
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
-
+//    @OneToOne
+//   private User user;
     public Doctor() {
     }
 
     public Doctor(Long id) {
         this.id = id;
     }
+    
 
     public Doctor(Long id, String name, Date dateOfBirth, String officeAddress, BigInteger officePhone) {
         this.id = id;

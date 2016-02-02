@@ -189,7 +189,7 @@ public class PrescriptionData extends javax.swing.JFrame {
         ExperenieceYearsLabel.setText("Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -291,9 +291,16 @@ public class PrescriptionData extends javax.swing.JFrame {
         jPanel2.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 15;
+        gridBagConstraints.gridwidth = 17;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.5;
+        gridBagConstraints.weighty = 1.1;
+        gridBagConstraints.insets = new java.awt.Insets(2, 35, 2, 35);
         getContentPane().add(jPanel2, gridBagConstraints);
 
         pack();

@@ -19,6 +19,7 @@ import pl.medisoft.application.message.Messages;
 import pl.medisoft.ui.common.BaseFrame;
 import pl.medisoft.infrastructure.doctor.PrescriptionDBManager;
 import pl.medisoft.domain.Patient.Prescription;
+import pl.medisoft.ui.admin.user.CalendarFrame;
 
 
 
@@ -95,9 +96,8 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         addDoctorButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -196,39 +196,31 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
 
         jTabbedPane3.addTab("Doctor Table", jPanel3);
 
-        jLabel1.setText("jLabel1");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(jLabel1)
-                .addContainerGap(1123, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(jLabel1)
-                .addContainerGap(588, Short.MAX_VALUE))
-        );
-
-        jTabbedPane3.addTab("Visits", jPanel4);
+        jButton1.setText("Show Visits calendar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1225, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(979, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 692, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(jButton1)
+                .addContainerGap(631, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("Patient record card", jPanel5);
+        jTabbedPane3.addTab("Visits", jPanel5);
 
         jLabel3.setText("jLabel3");
 
@@ -366,6 +358,12 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
         dispose();
     }//GEN-LAST:event_WypisujRecepteButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new CalendarFrame(this).setVisible(true);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -374,11 +372,10 @@ public class DoctorFrame extends BaseFrame implements ListSelectionListener{
     private java.util.List<pl.medisoft.ui.doctor.Doctor> doctorList;
     private javax.persistence.Query doctorQuery;
     private javax.persistence.EntityManager entityManager;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
