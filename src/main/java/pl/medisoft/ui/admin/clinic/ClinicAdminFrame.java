@@ -61,7 +61,7 @@ public class ClinicAdminFrame extends BaseFrame {
         jPanel1 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel4 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
+        doctorComboBox = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jLabel15 = new javax.swing.JLabel();
@@ -121,7 +121,7 @@ public class ClinicAdminFrame extends BaseFrame {
         jPanel4.setMinimumSize(new java.awt.Dimension(600, 100));
         jPanel4.setPreferredSize(new java.awt.Dimension(600, 535));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        doctorComboBox.setModel(new DoctorComboBoxModel());
 
         jLabel14.setText("Wybierz lekarza");
 
@@ -153,7 +153,7 @@ public class ClinicAdminFrame extends BaseFrame {
                     .addComponent(jLabel15)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel14)
-                        .addComponent(jComboBox1, 0, 330, Short.MAX_VALUE)
+                        .addComponent(doctorComboBox, 0, 330, Short.MAX_VALUE)
                         .addComponent(jSpinner1))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(37, Short.MAX_VALUE))
@@ -164,7 +164,7 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(doctorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel15)
                 .addGap(3, 3, 3)
@@ -599,6 +599,7 @@ public class ClinicAdminFrame extends BaseFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployeeButton;
+    private javax.swing.JComboBox doctorComboBox;
     private javax.swing.JTextField employeeBonusTextField;
     private javax.swing.JComboBox employeeContractComboBox;
     private javax.swing.JTextField employeeNameTextField;
@@ -612,7 +613,6 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JTextField employmentSalaryBaseTextField;
     private javax.swing.JTextField employmentWorkTimeTextField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
