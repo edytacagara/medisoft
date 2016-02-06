@@ -5,6 +5,9 @@
  */
 package pl.medisoft.ui.admin.clinic;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -13,6 +16,8 @@ import pl.medisoft.application.common.StringsUtils;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
+import pl.medisoft.domain.Patient.Visit;
+import pl.medisoft.domain.Patient.VisitType;
 import pl.medisoft.domain.admin.clinic.EmploymentReq;
 import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
@@ -21,6 +26,8 @@ import pl.medisoft.infrastructure.admin.clinic.EmploymentReqDao;
 import pl.medisoft.infrastructure.admin.clinic.EmploymentReqDaoJpa;
 import pl.medisoft.infrastructure.user.UserDao;
 import pl.medisoft.infrastructure.user.UserDaoJpa;
+import pl.medisoft.infrastructure.visit.VisitDao;
+import pl.medisoft.infrastructure.visit.VisitDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
 
 /**
@@ -32,18 +39,25 @@ public class ClinicAdminFrame extends BaseFrame {
     private final Messages messages = Messages.getInstace();
     private final String MODULE_NAME = messages.get(ModuleEnum.ADMIN_CLINIC.getMessageKey());
     private User currentEmployee;
+    private VisitTableModel visitTableModel;
 
     public ClinicAdminFrame(final JFrame parent) {
         super(parent);
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
+        this.visitTableModel = new VisitTableModel();
         initComponents();
 
         if(employeeSelectComboBox.getItemCount() > 0)
             employeeSelectComboBox.setSelectedIndex(0);
         if(employmentRoleComboBox.getItemCount() > 0)
-        employmentRoleComboBox.setSelectedIndex(0);
+            employmentRoleComboBox.setSelectedIndex(0);
+        if(doctorComboBox.getItemCount() > 0)
+            doctorComboBox.setSelectedIndex(0);
+        if(patientComboBox.getItemCount() > 0)
+            patientComboBox.setSelectedIndex(0);
         
         currentEmployee = null;
+        
         
         setResizable(false);
     }
@@ -63,17 +77,20 @@ public class ClinicAdminFrame extends BaseFrame {
         jPanel4 = new javax.swing.JPanel();
         doctorComboBox = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        visitDateSpinner = new javax.swing.JSpinner();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        visitTable = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
+        visitShowButton = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox();
+        patientComboBox = new javax.swing.JComboBox();
         jLabel17 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        addVisitButton = new javax.swing.JButton();
+        visitTypeComboBox = new javax.swing.JComboBox();
+        visitDateTimeSpinner = new javax.swing.JSpinner();
+        jLabel19 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel5 = new javax.swing.JPanel();
@@ -125,22 +142,22 @@ public class ClinicAdminFrame extends BaseFrame {
 
         jLabel14.setText("Wybierz lekarza");
 
+        visitDateSpinner.setModel(new javax.swing.SpinnerDateModel());
+        visitDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(visitDateSpinner, "yyyy-MM-dd"));
+
         jLabel15.setText("Data");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable2);
+        visitTable.setModel(this.visitTableModel);
+        jScrollPane3.setViewportView(visitTable);
 
         jLabel16.setText("Dotychczas zapisane wizyty");
+
+        visitShowButton.setText("Wyświetl wyniki");
+        visitShowButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                visitShowButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -151,11 +168,12 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel16)
                     .addComponent(jLabel15)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel14)
-                        .addComponent(doctorComboBox, 0, 330, Short.MAX_VALUE)
-                        .addComponent(jSpinner1))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(visitShowButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(doctorComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 330, Short.MAX_VALUE)
+                        .addComponent(visitDateSpinner, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -165,28 +183,41 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(doctorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel15)
                 .addGap(3, 3, 3)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addComponent(visitDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(visitShowButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jSplitPane2.setLeftComponent(jPanel4);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        patientComboBox.setModel(new PatientComboBoxModel());
 
         jLabel17.setText("Wybierz pacjenta");
 
-        jTextField1.setText("jTextField1");
-
         jLabel18.setText("Opis wizyty");
 
-        jButton1.setText("Dodaj wizytę");
+        addVisitButton.setText("Dodaj wizytę");
+        addVisitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addVisitButtonActionPerformed(evt);
+            }
+        });
+
+        visitTypeComboBox.setModel(new VisitTypeComboBoxModel());
+        visitTypeComboBox.setSelectedIndex(0);
+
+        visitDateTimeSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR));
+        visitDateTimeSpinner.setEditor(new javax.swing.JSpinner.DateEditor(visitDateTimeSpinner, "yyyy-MM-dd HH:mm"));
+
+        jLabel19.setText("Data i godzina");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -194,13 +225,16 @@ public class ClinicAdminFrame extends BaseFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel17)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel18)
+                        .addComponent(jLabel17)
+                        .addComponent(patientComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(visitTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addVisitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(visitDateTimeSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,14 +242,18 @@ public class ClinicAdminFrame extends BaseFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(patientComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(visitTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addComponent(jLabel19)
+                .addGap(3, 3, 3)
+                .addComponent(visitDateTimeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(addVisitButton)
+                .addContainerGap(309, Short.MAX_VALUE))
         );
 
         jSplitPane2.setRightComponent(jPanel7);
@@ -597,8 +635,30 @@ public class ClinicAdminFrame extends BaseFrame {
         }
     }//GEN-LAST:event_saveEmployeeButtonActionPerformed
 
+    private void visitShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitShowButtonActionPerformed
+        User doctor = (User)this.doctorComboBox.getSelectedItem();
+        Date date = (Date)this.visitDateSpinner.getValue();
+        this.visitTableModel.updateModel(doctor, date);
+        this.visitDateTimeSpinner.setValue(date);
+    }//GEN-LAST:event_visitShowButtonActionPerformed
+
+    private void addVisitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVisitButtonActionPerformed
+        User doctor = (User)this.doctorComboBox.getSelectedItem();
+        User patient = (User)this.patientComboBox.getSelectedItem();
+        VisitType visitType = (VisitType)this.visitTypeComboBox.getSelectedItem();
+        Date date = (Date)visitDateTimeSpinner.getValue();
+        
+        VisitDao visitDao = new VisitDaoJpa();
+        Visit visit = new Visit();
+        //visit.setDoctor();
+        visit.setPatient(patient);
+        visit.setVisitDate(date);
+        visit.setVisitType(null);
+    }//GEN-LAST:event_addVisitButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployeeButton;
+    private javax.swing.JButton addVisitButton;
     private javax.swing.JComboBox doctorComboBox;
     private javax.swing.JTextField employeeBonusTextField;
     private javax.swing.JComboBox employeeContractComboBox;
@@ -612,8 +672,6 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JComboBox employmentRoleComboBox;
     private javax.swing.JTextField employmentSalaryBaseTextField;
     private javax.swing.JTextField employmentWorkTimeTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -624,6 +682,7 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -643,16 +702,19 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox patientComboBox;
     private javax.swing.JButton removeEmployeeButton;
     private javax.swing.JButton saveEmployeeButton;
     private javax.swing.JTextField unassignedWorkTimeTextField;
+    private javax.swing.JSpinner visitDateSpinner;
+    private javax.swing.JSpinner visitDateTimeSpinner;
+    private javax.swing.JButton visitShowButton;
+    private javax.swing.JTable visitTable;
+    private javax.swing.JComboBox visitTypeComboBox;
     // End of variables declaration//GEN-END:variables
 
 }
