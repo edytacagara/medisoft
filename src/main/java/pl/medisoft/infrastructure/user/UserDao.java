@@ -7,6 +7,7 @@ package pl.medisoft.infrastructure.user;
 
 import java.util.List;
 import pl.medisoft.domain.user.User;
+import pl.medisoft.domain.user.UsersDetails;
 
 /**
  *
@@ -21,4 +22,5 @@ public interface UserDao {
     List<User> findAllEmployees();
     void addUser(User user);
     boolean updateUser(User user);
+    void addUserDetails(UsersDetails userDetails);
 }

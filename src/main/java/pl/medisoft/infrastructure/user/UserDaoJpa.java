@@ -8,6 +8,7 @@ package pl.medisoft.infrastructure.user;
 import java.util.ArrayList;
 import java.util.List;
 import pl.medisoft.domain.user.User;
+import pl.medisoft.domain.user.UsersDetails;
 import pl.medisoft.infrastructure.BasicDaoJpa;
 
 /**
@@ -63,6 +64,13 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
         this.getEntityManager().getTransaction().commit();
     }
 
+    @Override
+    public void addUserDetails(UsersDetails userDetails){
+        this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().persist(userDetails);
+        this.getEntityManager().getTransaction().commit();
+    }
+    
     @Override
     public boolean updateUser(User user) {
         try {
