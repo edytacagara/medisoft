@@ -11,31 +11,24 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
+import pl.medisoft.infrastructure.doctor.DoctorDao;
+import pl.medisoft.infrastructure.doctor.DoctorDaoJpa;
 import pl.medisoft.infrastructure.user.UserDaoJpa;
+import pl.medisoft.ui.doctor.Doctor;
 
 /**
  *
  * @author Edyta Cagara
  */
-public class DoctorComboBoxModel extends DefaultComboBoxModel<User>{
+public class DoctorComboBoxModel extends DefaultComboBoxModel<Doctor>{
     
-    private final UserDaoJpa userDaoJpa;
-    private List<User> doctors;
+    private final DoctorDao doctorDao;
+    private List<Doctor> doctors;
     
     public DoctorComboBoxModel(){
         super();
-        this.doctors = new ArrayList<User>();
-        this.userDaoJpa = new UserDaoJpa();
-        List<User> users = userDaoJpa.findAllEmployees();
-        Iterator<User> i = users.iterator();
-        while(i.hasNext()){
-            User user = i.next();
-            Iterator<RoleDef> r = user.getUserRoles().iterator();
-            while(r.hasNext()){
-                if(r.next().getId().equals("DOCTOR"))
-                    this.doctors.add(user);
-            }
-        }
+        this.doctorDao = new DoctorDaoJpa();
+        this.doctors = doctorDao.findAll();
     }
     
     @Override
@@ -44,7 +37,7 @@ public class DoctorComboBoxModel extends DefaultComboBoxModel<User>{
     }
     
     @Override
-    public User getElementAt(int index){
+    public Doctor getElementAt(int index){
         return this.doctors.get(index);
     }
 }

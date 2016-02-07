@@ -7,6 +7,8 @@ package pl.medisoft.ui.admin.clinic;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +31,7 @@ import pl.medisoft.infrastructure.user.UserDaoJpa;
 import pl.medisoft.infrastructure.visit.VisitDao;
 import pl.medisoft.infrastructure.visit.VisitDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
+import pl.medisoft.ui.doctor.Doctor;
 
 /**
  *
@@ -105,7 +108,6 @@ public class ClinicAdminFrame extends BaseFrame {
         jLabel9 = new javax.swing.JLabel();
         employeeBonusTextField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        employeeContractComboBox = new javax.swing.JComboBox();
         addEmployeeButton = new javax.swing.JButton();
         removeEmployeeButton = new javax.swing.JButton();
         saveEmployeeButton = new javax.swing.JButton();
@@ -116,6 +118,7 @@ public class ClinicAdminFrame extends BaseFrame {
         employeeWorktimeTextField = new javax.swing.JTextField();
         employeePeselTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        employeeContractTextField = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         employmentRoleComboBox = new javax.swing.JComboBox();
@@ -298,8 +301,6 @@ public class ClinicAdminFrame extends BaseFrame {
 
         jLabel10.setText("Rodzaj umowy");
 
-        employeeContractComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         addEmployeeButton.setText("Dodaj nowego pracownika");
         addEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -319,6 +320,7 @@ public class ClinicAdminFrame extends BaseFrame {
         employeeRoleList.setModel(new UserRoleListModel());
         jScrollPane2.setViewportView(employeeRoleList);
 
+        employeeSalaryTextField.setEditable(false);
         employeeSalaryTextField.setText("0");
 
         jLabel12.setText("Pensja");
@@ -354,12 +356,14 @@ public class ClinicAdminFrame extends BaseFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(employeePeselTextField)
                             .addComponent(employeeSalaryTextField)
-                            .addComponent(employeeBonusTextField)
-                            .addComponent(employeeContractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                             .addComponent(employeeSurnameTextField)
                             .addComponent(employeeNameTextField)
                             .addComponent(employeeSelectComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(employeeBonusTextField)
+                                .addGap(141, 141, 141))
+                            .addComponent(employeeContractTextField)
                             .addComponent(employeeWorktimeTextField))))
                 .addGap(194, 194, 194))
         );
@@ -394,8 +398,8 @@ public class ClinicAdminFrame extends BaseFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(employeeContractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10)
+                    .addComponent(employeeContractTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(employeeBonusTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -535,15 +539,20 @@ public class ClinicAdminFrame extends BaseFrame {
             List<RoleDef> userRoles = user.getUserRoles();
             
             employeeRoleList.setListData(employmentReqs.toArray());
-            int[] selectedIndices = new int[userRoles.size()];
+            List<Integer> selectedIndices = new ArrayList<>();
             
             for(int i=0; i<userRoles.size(); i++){
                 for(int k=0;k<employmentReqs.size();k++){
-                    if(employmentReqs.get(k).getRoleDef().equals(userRoles.get(i)))
-                        selectedIndices[i] = k;
+                    if(employmentReqs.get(k).getRoleDef().getId().equals(userRoles.get(i).getId()))
+                        selectedIndices.add(k);
                 }
             }
-            employeeRoleList.setSelectedIndices(selectedIndices);
+            
+            int[] selectedIndicesArray = new int[selectedIndices.size()];
+            for(int i=0;i<selectedIndices.size();i++){
+                selectedIndicesArray[i] = selectedIndices.get(i);
+            }
+            employeeRoleList.setSelectedIndices(selectedIndicesArray);
             
             employeeNameTextField.setText(user.getName());
             employeeSurnameTextField.setText(user.getSurname());
@@ -564,11 +573,13 @@ public class ClinicAdminFrame extends BaseFrame {
                 int bonus = userDetails.getBonus().intValue();
                 int salaryWithBonus = (int)Math.round(totalSalary*(100+bonus)/100.0);
                 employeeWorktimeTextField.setText(userDetails.getWorkTime().toString());
-                employeeBonusTextField.setText(Integer.toString(bonus) + "%");
+                employeeContractTextField.setText(userDetails.getContractType());
+                employeeBonusTextField.setText(Integer.toString(bonus));
                 employeeSalaryTextField.setText(Integer.toString(salaryWithBonus));
             }
             else{
                 employeeWorktimeTextField.setText("brak danych");
+                employeeContractTextField.setText("brak danych");
                 employeeBonusTextField.setText("brak danych");
                 employeeSalaryTextField.setText("brak danych");
             }
@@ -600,11 +611,17 @@ public class ClinicAdminFrame extends BaseFrame {
     private void addEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeButtonActionPerformed
         this.currentEmployee = null;
         this.employeeSelectComboBox.setSelectedIndex(-1);
+        
+        this.employeeBonusTextField.setText("0");
+        this.employeeContractTextField.setText("");
+        this.employeeSalaryTextField.setText("");
+        this.employeeWorktimeTextField.setText("0");
     }//GEN-LAST:event_addEmployeeButtonActionPerformed
 
     private void saveEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEmployeeButtonActionPerformed
         if(this.currentEmployee == null){
             this.currentEmployee = new User();
+            
             this.currentEmployee.setName(this.employeeNameTextField.getText());
             this.currentEmployee.setSurname(this.employeeSurnameTextField.getText());
             this.currentEmployee.setPesel(this.employeePeselTextField.getText());
@@ -617,7 +634,29 @@ public class ClinicAdminFrame extends BaseFrame {
             List<RoleDef> userRoles = this.employeeRoleList.getSelectedValuesList();
             this.currentEmployee.setUserRoles(userRoles);
             
-            new UserDaoJpa().addUser(currentEmployee);
+            /*
+            
+            this.currentEmployee.setUsersDetails(employeeDetails);
+            */
+            
+            UserDao userDao = new UserDaoJpa();
+            userDao.addUser(currentEmployee);
+            
+            UsersDetails employeeDetails = new UsersDetails(this.currentEmployee.getId());
+            employeeDetails.setUser(currentEmployee);
+            employeeDetails.setContractType(this.employeeContractTextField.getText());
+            employeeDetails.setWorkTime(Long.parseLong(this.employeeWorktimeTextField.getText()));
+            employeeDetails.setBonus(Long.parseLong(this.employeeBonusTextField.getText()));
+            
+            Calendar calendar1 = Calendar.getInstance();
+            employeeDetails.setContractBeginDate(calendar1.getTime());
+            
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.add(Calendar.YEAR, 1);
+            employeeDetails.setContractEndDate(calendar2.getTime());
+            
+            userDao.addUserDetails(employeeDetails);
+            
             this.employeeSelectComboBox.setModel(new EmployeeComboBoxModel());
             this.employeeSelectComboBox.validate();
         }
@@ -629,31 +668,40 @@ public class ClinicAdminFrame extends BaseFrame {
             List<RoleDef> userRoles = this.employeeRoleList.getSelectedValuesList();
             this.currentEmployee.setUserRoles(userRoles);
             
+            this.currentEmployee.getUsersDetails().setContractType(this.employeeContractTextField.getText());
+            this.currentEmployee.getUsersDetails().setWorkTime(Long.parseLong(this.employeeWorktimeTextField.getText()));
+            this.currentEmployee.getUsersDetails().setBonus(Long.parseLong(this.employeeBonusTextField.getText()));
+            
             new UserDaoJpa().updateUser(currentEmployee);
             this.employeeSelectComboBox.setModel(new EmployeeComboBoxModel());
+            this.employeeSelectComboBox.setSelectedItem(currentEmployee);
             this.employeeSelectComboBox.validate();
         }
     }//GEN-LAST:event_saveEmployeeButtonActionPerformed
 
     private void visitShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitShowButtonActionPerformed
-        User doctor = (User)this.doctorComboBox.getSelectedItem();
+        Doctor doctor = (Doctor)this.doctorComboBox.getSelectedItem();
         Date date = (Date)this.visitDateSpinner.getValue();
         this.visitTableModel.updateModel(doctor, date);
         this.visitDateTimeSpinner.setValue(date);
     }//GEN-LAST:event_visitShowButtonActionPerformed
 
     private void addVisitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVisitButtonActionPerformed
-        User doctor = (User)this.doctorComboBox.getSelectedItem();
+        Doctor doctor = (Doctor)this.doctorComboBox.getSelectedItem();
         User patient = (User)this.patientComboBox.getSelectedItem();
         VisitType visitType = (VisitType)this.visitTypeComboBox.getSelectedItem();
         Date date = (Date)visitDateTimeSpinner.getValue();
         
         VisitDao visitDao = new VisitDaoJpa();
         Visit visit = new Visit();
-        //visit.setDoctor();
+        visit.setDoctor(doctor);
         visit.setPatient(patient);
         visit.setVisitDate(date);
-        visit.setVisitType(null);
+        visit.setVisitType(visitType);
+        visitDao.addVisit(visit);
+        
+        this.visitDateSpinner.setValue(date);
+        this.visitTableModel.updateModel(doctor, date);
     }//GEN-LAST:event_addVisitButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -661,7 +709,7 @@ public class ClinicAdminFrame extends BaseFrame {
     private javax.swing.JButton addVisitButton;
     private javax.swing.JComboBox doctorComboBox;
     private javax.swing.JTextField employeeBonusTextField;
-    private javax.swing.JComboBox employeeContractComboBox;
+    private javax.swing.JTextField employeeContractTextField;
     private javax.swing.JTextField employeeNameTextField;
     private javax.swing.JTextField employeePeselTextField;
     private javax.swing.JList employeeRoleList;

@@ -16,6 +16,7 @@ import pl.medisoft.domain.Patient.Visit;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.visit.VisitDao;
 import pl.medisoft.infrastructure.visit.VisitDaoJpa;
+import pl.medisoft.ui.doctor.Doctor;
 
 /**
  *
@@ -31,7 +32,7 @@ public class VisitTableModel extends AbstractTableModel{
         this.visits = new ArrayList<Visit>();
     }
     
-    public void updateModel(User doctor, Date date){
+    public void updateModel(Doctor doctor, Date date){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.visits = this.visitDao.findAllVisit(doctor.getId(),dateFormat.format(date));
         this.fireTableDataChanged();
