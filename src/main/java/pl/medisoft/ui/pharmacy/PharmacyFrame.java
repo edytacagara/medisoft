@@ -13,7 +13,7 @@ import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.domain.pharmacy.Medicament;
-import pl.medisoft.infrastructure.pharmacy.MedicamentsDaoJpa;
+import pl.medisoft.infrastructure.pharmacy.medicament.MedicamentsDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
 
 /**
@@ -90,6 +90,7 @@ public class PharmacyFrame extends BaseFrame {
         jInternalFrame1 = new javax.swing.JInternalFrame();
         addMedicamentButton = new javax.swing.JButton();
         updateStateButton = new javax.swing.JButton();
+        findButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -97,14 +98,26 @@ public class PharmacyFrame extends BaseFrame {
 
         jInternalFrame1.setVisible(true);
 
-        addMedicamentButton.setText("jButton1");
+        addMedicamentButton.setText("Dodaj lek");
         addMedicamentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMedicamentButtonActionPerformed(evt);
             }
         });
 
-        updateStateButton.setText("jButton1");
+        updateStateButton.setText("Aktualizuj");
+        updateStateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateStateButtonActionPerformed(evt);
+            }
+        });
+
+        findButton.setText("Szukaj lek");
+        findButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
@@ -116,6 +129,10 @@ public class PharmacyFrame extends BaseFrame {
                     .addComponent(addMedicamentButton, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(updateStateButton, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(findButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,7 +140,9 @@ public class PharmacyFrame extends BaseFrame {
                 .addComponent(addMedicamentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(updateStateButton)
-                .addGap(0, 226, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(findButton)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -161,7 +180,7 @@ public class PharmacyFrame extends BaseFrame {
             .addComponent(jInternalFrame1)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 29, Short.MAX_VALUE))
         );
 
         pack();
@@ -175,8 +194,23 @@ public class PharmacyFrame extends BaseFrame {
         
     }//GEN-LAST:event_addMedicamentButtonActionPerformed
 
+    private void updateStateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateStateButtonActionPerformed
+        // TODO add your handling code here:
+        UpdateState updateState = new UpdateState(this);
+        updateState.pack();
+        updateState.setVisible(true);
+    }//GEN-LAST:event_updateStateButtonActionPerformed
+
+    private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
+        // TODO add your handling code here:
+        FindMedicament fm = new FindMedicament(this);
+        fm.pack();
+        fm.setVisible(true);
+    }//GEN-LAST:event_findButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMedicamentButton;
+    private javax.swing.JButton findButton;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

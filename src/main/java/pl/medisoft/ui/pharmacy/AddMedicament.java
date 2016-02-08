@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.domain.pharmacy.Medicament;
-import pl.medisoft.infrastructure.pharmacy.MedicamentsDaoJpa;
+import pl.medisoft.infrastructure.pharmacy.medicament.MedicamentsDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
 
 /**
