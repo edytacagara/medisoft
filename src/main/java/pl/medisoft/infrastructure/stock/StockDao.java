@@ -14,4 +14,6 @@ import pl.medisoft.domain.stock.StockInfo;
  */
 public interface StockDao {
     List<StockInfo> findAll();
+    void addStockInfo(StockInfo stockInfo);
+    boolean updateStockInfo(StockInfo stockInfo);
 }

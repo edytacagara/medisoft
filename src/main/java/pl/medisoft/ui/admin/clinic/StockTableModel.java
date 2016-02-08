@@ -71,4 +71,36 @@ public class StockTableModel extends AbstractTableModel{
         }
         return null;
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(columnIndex != 0)
+            return true;
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        StockInfo stockInfo =  stockInfos.get(rowIndex);
+        switch(columnIndex){    
+            case 1:
+                String description=aValue.toString();
+                stockInfo.setDescription(description);
+                break;
+            case 3:
+                long totalValue = Long.parseLong(aValue.toString());
+                stockInfo.setTotalValue(totalValue);
+                break;
+            case 4:
+                long currentValue = Long.parseLong(aValue.toString());
+                stockInfo.setCurrentValue(currentValue);
+                break;
+        }
+        
+        stockDaoJpa.updateStockInfo(stockInfo); 
+        fireTableDataChanged();
+    }
+    
+    
+    
 }

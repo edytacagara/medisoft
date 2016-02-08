@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import pl.medisoft.application.common.StringsUtils;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
@@ -309,6 +310,11 @@ public class ClinicAdminFrame extends BaseFrame {
         });
 
         removeEmployeeButton.setText("Usun pracownika");
+        removeEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeEmployeeButtonActionPerformed(evt);
+            }
+        });
 
         saveEmployeeButton.setText("Zapisz");
         saveEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -668,9 +674,22 @@ public class ClinicAdminFrame extends BaseFrame {
             List<RoleDef> userRoles = this.employeeRoleList.getSelectedValuesList();
             this.currentEmployee.setUserRoles(userRoles);
             
-            this.currentEmployee.getUsersDetails().setContractType(this.employeeContractTextField.getText());
-            this.currentEmployee.getUsersDetails().setWorkTime(Long.parseLong(this.employeeWorktimeTextField.getText()));
-            this.currentEmployee.getUsersDetails().setBonus(Long.parseLong(this.employeeBonusTextField.getText()));
+            UsersDetails employeeDetails = this.currentEmployee.getUsersDetails();
+            if(employeeDetails == null){
+                employeeDetails = new UsersDetails(currentEmployee.getId());
+                employeeDetails.setUser(currentEmployee);
+                
+                employeeDetails.setContractType(this.employeeContractTextField.getText());
+                employeeDetails.setWorkTime(Long.parseLong(this.employeeWorktimeTextField.getText()));
+                employeeDetails.setBonus(Long.parseLong(this.employeeBonusTextField.getText()));
+                
+                this.currentEmployee.setUsersDetails(employeeDetails);
+            }
+            else{
+                employeeDetails.setContractType(this.employeeContractTextField.getText());
+                employeeDetails.setWorkTime(Long.parseLong(this.employeeWorktimeTextField.getText()));
+                employeeDetails.setBonus(Long.parseLong(this.employeeBonusTextField.getText()));
+            }
             
             new UserDaoJpa().updateUser(currentEmployee);
             this.employeeSelectComboBox.setModel(new EmployeeComboBoxModel());
@@ -703,6 +722,25 @@ public class ClinicAdminFrame extends BaseFrame {
         this.visitDateSpinner.setValue(date);
         this.visitTableModel.updateModel(doctor, date);
     }//GEN-LAST:event_addVisitButtonActionPerformed
+
+    private void removeEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEmployeeButtonActionPerformed
+        Object[] options = {"Tak",
+                    "Nie"};
+        int n = JOptionPane.showOptionDialog(this,
+            "Czy na pewno chcesz usunąć tego pracownika?",
+            "Ostrzeżenie",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[1]);
+        
+        if(n == JOptionPane.YES_OPTION){
+            new UserDaoJpa().removeUser(currentEmployee);
+            this.employeeSelectComboBox.setModel(new EmployeeComboBoxModel());
+            this.employeeSelectComboBox.validate();
+        }
+    }//GEN-LAST:event_removeEmployeeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployeeButton;
