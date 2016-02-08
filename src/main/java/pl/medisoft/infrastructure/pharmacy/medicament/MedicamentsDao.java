@@ -3,7 +3,7 @@
  * Copyright (c) 2015-2016 IT Students of 5th year 
  * at the University of Maria Curie-Sklodowska in Lublin 
  */
-package pl.medisoft.infrastructure.pharmacy;
+package pl.medisoft.infrastructure.pharmacy.medicament;
 
 import java.util.List;
 import pl.medisoft.domain.pharmacy.Medicament;
@@ -15,6 +15,7 @@ import pl.medisoft.domain.pharmacy.Medicament;
 public interface MedicamentsDao {
     void addMedicament(Medicament medicament);
     List<Medicament> findALL();
+    Medicament findByName(String name);
     void updateMedicament();
     
 }

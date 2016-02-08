@@ -642,7 +642,6 @@ public class ClinicAdminFrame extends BaseFrame {
             
             /*
             
-            this.currentEmployee.setUsersDetails(employeeDetails);
             */
             
             UserDao userDao = new UserDaoJpa();
