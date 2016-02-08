@@ -5,23 +5,32 @@
  */
 package pl.medisoft.infrastructure.pharmacy.exchange;
 
+import java.util.ArrayList;
 import java.util.List;
 import pl.medisoft.domain.pharmacy.Exchange;
+import pl.medisoft.domain.pharmacy.Medicament;
+import pl.medisoft.infrastructure.BasicDaoJpa;
 
 /**
  *
  * @author Piotr
  */
-public class ExchangeDaoJpa implements ExchangeDao {
+public class ExchangeDaoJpa extends BasicDaoJpa implements ExchangeDao {
 
+    private static final String FIND_ALL = "select e from Exchange e";
+    
     @Override
     public void addExchange(Exchange exchange) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          getEntityManager().getTransaction().begin();            
+            getEntityManager().persist(exchange);
+            getEntityManager().getTransaction().commit();
     }
 
     @Override
     public List<Exchange> findAll(String nazwa) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Exchange> list = new ArrayList();
+        list = this.getEntityManager().createQuery(FIND_ALL).getResultList();
+        return list;
     }
     
 }

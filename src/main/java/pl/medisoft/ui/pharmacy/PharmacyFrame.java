@@ -43,8 +43,7 @@ public class PharmacyFrame extends BaseFrame {
     @Override
     public void customize() {
         this.listMed = medJpa.findALL();
-        addMedicamentButton.setText(messages.get("app.pharmacy.addMedicament"));
-        updateStateButton.setText(messages.get("app.pharmacy.updateState"));
+       
         jTable1.setModel(new AbstractTableModel() {
             @Override
             public int getRowCount() {
