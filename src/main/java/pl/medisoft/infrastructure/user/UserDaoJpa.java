@@ -86,4 +86,18 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
        
     }
 
+    @Override
+    public boolean removeUser(User user) {
+        try {
+            this.getEntityManager().getTransaction().begin();
+            this.getEntityManager().remove(user);
+            this.getEntityManager().getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            getEntityManager().getTransaction().rollback();           
+            return false;
+        }
+    }
+
 }

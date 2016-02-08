@@ -5,10 +5,8 @@
  */
 package pl.medisoft.ui.admin.clinic;
 
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.user.UserDaoJpa;
 
@@ -36,4 +34,6 @@ public class EmployeeComboBoxModel extends DefaultComboBoxModel<User>{
     public User getElementAt(int index){
         return this.users.get(index);
     }
+    
+    
 }

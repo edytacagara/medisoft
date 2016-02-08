@@ -24,5 +24,26 @@ public class StockDaoJpa extends BasicDaoJpa implements StockDao{
         stockInfos = this.getEntityManager().createQuery(StockDaoJpa.FIND_ALL).getResultList();
         return stockInfos;
     }
+
+    @Override
+    public void addStockInfo(StockInfo stockInfo) {
+        this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().persist(stockInfo);
+        this.getEntityManager().getTransaction().commit();
+    }
+
+    @Override
+    public boolean updateStockInfo(StockInfo stockInfo) {
+        try {
+            this.getEntityManager().getTransaction().begin();
+            this.getEntityManager().merge(stockInfo);
+            this.getEntityManager().getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            getEntityManager().getTransaction().rollback();
+            return false;
+        }
+    }
     
 }

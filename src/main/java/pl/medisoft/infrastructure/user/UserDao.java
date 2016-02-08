@@ -22,5 +22,6 @@ public interface UserDao {
     List<User> findAllEmployees();
     void addUser(User user);
     boolean updateUser(User user);
+    boolean removeUser(User user);
     void addUserDetails(UsersDetails userDetails);
 }
