@@ -17,6 +17,7 @@ public interface MedicamentsDao {
     List<Medicament> findALL();
     String findName(Long id);
     Medicament findByName(String name);
+    Medicament findByNameLast(String name);
     boolean updateMedicament(Medicament m);
     
 }

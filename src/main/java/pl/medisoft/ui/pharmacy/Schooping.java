@@ -106,7 +106,18 @@ public class Schooping extends BaseFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        double pom;
+        String s;
         JOptionPane.showMessageDialog(this,"Zakupy zakonczone");
+        for (int i = 0 ; i < pf.koszyk.size(); i++){
+            s = pf.koszyk.get(i).getName();
+            
+            m = daoJpa.findByNameLast(s);
+            pom = m.getAmount() - pf.koszyk.get(i).getAmount();
+            m.setAmount(pom);
+            daoJpa.updateMedicament(m);
+            
+        }
       
         pf.tworzKoszyk();
         customize();

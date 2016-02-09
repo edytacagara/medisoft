@@ -22,6 +22,7 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
     private static final String FIND_ALL = "select m from Medicament m";
     private static final String FIND_BY_NAME = "select m from Medicament m where lower(m.medicamentName) = :name";
     private static final String FIND_NAME = "select m.medicamentName from Medicament m where m.id = :id";
+    private static final String FIND_BY_NAME_LAST = "select m from Medicament m where (m.medicamentName) = :name";
     
     @Override
     public void addMedicament(Medicament medicament) {
@@ -64,6 +65,17 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
     public Medicament findByName(String name) {
       try{
            return (Medicament) getEntityManager().createQuery(FIND_BY_NAME).setParameter("name", name).getSingleResult();
+      }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+      }
+      
+    }
+
+    @Override
+    public Medicament findByNameLast(String name) {
+        try{
+           return (Medicament) getEntityManager().createQuery(FIND_BY_NAME_LAST).setParameter("name", name).getSingleResult();
       }catch (Exception e) {
             e.printStackTrace();
             return null;

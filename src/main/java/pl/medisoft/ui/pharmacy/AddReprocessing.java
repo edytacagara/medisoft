@@ -109,11 +109,22 @@ public class AddReprocessing extends BaseFrame {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
+        double pom;
+        double pom2;
         r = new Reprocessing();
         r.setMedicament(m.getId());
-        r.setAmount(Double.parseDouble(jTextField1.getText()));
-        daoJpa.addReprocesing(r);
-       JOptionPane.showMessageDialog(this,"Dodano");
+        pom2 =(Double.parseDouble(jTextField1.getText()));
+        if(pom2 > m.getAmount()){
+            JOptionPane.showMessageDialog(this,"Nie posiadamy tyle leku");
+        }else{
+            r.setAmount(pom2);
+             pom = m.getAmount() - r.getAmount();
+             m.setAmount(pom);
+            daoJpa.addReprocesing(r);
+            medicamentJpa.updateMedicament(m);
+            JOptionPane.showMessageDialog(this,"Dodano");
+        }
+       
     }//GEN-LAST:event_saveButtonActionPerformed
 
    
