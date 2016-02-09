@@ -25,8 +25,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jInternalFrame1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="464" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="520" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,18 +49,19 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="addMedicamentButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="updateStateButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="findButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="addMedicamentButton" max="32767" attributes="0"/>
+                      <Component id="updateStateButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="findButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="utylizujButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="addZamienikButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="listUtylizujButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="findZamienikButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="addToSaleButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="listaSprzedazyButton" alignment="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -72,6 +73,18 @@
                   <Component id="updateStateButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="findButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="utylizujButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="addZamienikButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="findZamienikButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="listUtylizujButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="addToSaleButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="listaSprzedazyButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -101,6 +114,48 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="findButtonActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="utylizujButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Utylizuj"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="utylizujButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="addZamienikButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Dodaj Zamienik"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addZamienikButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="findZamienikButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Znajdz Zamienik"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="findZamienikButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="listUtylizujButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Lista Utylizacji"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listUtylizujButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="listaSprzedazyButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Lista Sprzedazy"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="addToSaleButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Dodaj do koszyka"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

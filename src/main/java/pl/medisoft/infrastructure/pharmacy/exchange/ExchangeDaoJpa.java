@@ -17,7 +17,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
  */
 public class ExchangeDaoJpa extends BasicDaoJpa implements ExchangeDao {
 
-    private static final String FIND_ALL = "select e from Exchange e";
+    private static final String FIND_ALL = "select e from Exchange e where e.medicament = :id";
     
     @Override
     public void addExchange(Exchange exchange) {
@@ -27,9 +27,9 @@ public class ExchangeDaoJpa extends BasicDaoJpa implements ExchangeDao {
     }
 
     @Override
-    public List<Exchange> findAll(String nazwa) {
+    public List<Exchange> findAll(Long id) {
         List<Exchange> list = new ArrayList();
-        list = this.getEntityManager().createQuery(FIND_ALL).getResultList();
+        list = this.getEntityManager().createQuery(FIND_ALL).setParameter("id", id).getResultList();
         return list;
     }
     

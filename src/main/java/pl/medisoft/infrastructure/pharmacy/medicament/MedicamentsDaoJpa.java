@@ -20,7 +20,7 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
 
     private static final String FIND_ALL = "select m from Medicament m";
     private static final String FIND_BY_NAME = "select m from Medicament m where m.medicamentName = :name";
-    
+    private static final String FIND_NAME = "select m.medicamentName from Medicament m where m.id = :id";
     
     @Override
     public void addMedicament(Medicament medicament) {
@@ -40,14 +40,28 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
     }
 
     @Override
-    public void updateMedicament() {
-        
+    public boolean updateMedicament(Medicament m) {
+        try {
+             this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().merge(m);
+        this.getEntityManager().getTransaction().commit();
+        return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            getEntityManager().getTransaction().rollback();           
+            return false;
+        }
     }
 
     @Override
-    public Medicament findByName(String name) 
+    public String findName(Long id) 
     {   
-        return (Medicament) getEntityManager().createQuery(FIND_BY_NAME).setParameter("name", name).getSingleResult();
+        return (String) getEntityManager().createQuery(FIND_NAME).setParameter("id", id).getSingleResult();
+    }
+
+    @Override
+    public Medicament findByName(String name) {
+       return (Medicament) getEntityManager().createQuery(FIND_BY_NAME).setParameter("name", name).getSingleResult();
     }
     
 }

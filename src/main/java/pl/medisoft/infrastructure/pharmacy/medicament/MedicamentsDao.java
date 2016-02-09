@@ -15,7 +15,8 @@ import pl.medisoft.domain.pharmacy.Medicament;
 public interface MedicamentsDao {
     void addMedicament(Medicament medicament);
     List<Medicament> findALL();
+    String findName(Long id);
     Medicament findByName(String name);
-    void updateMedicament();
+    boolean updateMedicament(Medicament m);
     
 }

@@ -34,9 +34,8 @@ public class Reprocessing implements Serializable {
     @Column(name = "ID")
     private Long id;
     
-    @OneToOne(optional = false)
-    @JoinColumn(name = "MEDICAMENT_ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    private Medicament medicament;
+    @Column(name = "MEDICAMENT_ID")
+    private Long medicament;
    
     @Column(name = "AMOUNT")
     private Double amount;
@@ -48,7 +47,7 @@ public class Reprocessing implements Serializable {
         this.id = id;
     }
 
-    public Reprocessing(Long id, Medicament medicament, Double amount) {
+    public Reprocessing(Long id, Long medicament, Double amount) {
         this.id = id;
         this.medicament = medicament;
         this.amount = amount;
@@ -63,11 +62,11 @@ public class Reprocessing implements Serializable {
         this.id = id;
     }
 
-    public Medicament getMedicament() {
+    public Long getMedicament() {
         return medicament;
     }
 
-    public void setMedicament(Medicament medicament) {
+    public void setMedicament(Long medicament) {
         this.medicament = medicament;
     }
 

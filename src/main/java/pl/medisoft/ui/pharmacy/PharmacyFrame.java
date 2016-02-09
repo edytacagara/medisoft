@@ -6,12 +6,14 @@
 package pl.medisoft.ui.pharmacy;
 
 import com.sun.net.httpserver.Headers;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
 import pl.medisoft.application.message.Messages;
+import pl.medisoft.domain.pharmacy.Calculation;
 import pl.medisoft.domain.pharmacy.Medicament;
 import pl.medisoft.infrastructure.pharmacy.medicament.MedicamentsDaoJpa;
 import pl.medisoft.ui.common.BaseFrame;
@@ -28,11 +30,12 @@ public class PharmacyFrame extends BaseFrame {
     private MedicamentsDaoJpa medJpa = new MedicamentsDaoJpa();
     private List<Medicament> listMed;
     private final JFrame parent;
+    private List<Calculation> koszyk;
     public PharmacyFrame(final JFrame parent) {
         super(parent);
         this.parent = parent;
         setTitle(Configuration.TITLE + " " + Configuration.VERSION + " " + MODULE_NAME);
-        
+        tworzKoszyk();
         initComponents();
         customize();
         setResizable(false);
@@ -40,6 +43,10 @@ public class PharmacyFrame extends BaseFrame {
         
     }
 
+    public void tworzKoszyk(){
+        koszyk = new ArrayList<>();
+    }
+    
     @Override
     public void customize() {
         this.listMed = medJpa.findALL();
@@ -90,6 +97,12 @@ public class PharmacyFrame extends BaseFrame {
         addMedicamentButton = new javax.swing.JButton();
         updateStateButton = new javax.swing.JButton();
         findButton = new javax.swing.JButton();
+        utylizujButton = new javax.swing.JButton();
+        addZamienikButton = new javax.swing.JButton();
+        findZamienikButton = new javax.swing.JButton();
+        listUtylizujButton = new javax.swing.JButton();
+        listaSprzedazyButton = new javax.swing.JButton();
+        addToSaleButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -118,20 +131,54 @@ public class PharmacyFrame extends BaseFrame {
             }
         });
 
+        utylizujButton.setText("Utylizuj");
+        utylizujButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                utylizujButtonActionPerformed(evt);
+            }
+        });
+
+        addZamienikButton.setText("Dodaj Zamienik");
+        addZamienikButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addZamienikButtonActionPerformed(evt);
+            }
+        });
+
+        findZamienikButton.setText("Znajdz Zamienik");
+        findZamienikButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findZamienikButtonActionPerformed(evt);
+            }
+        });
+
+        listUtylizujButton.setText("Lista Utylizacji");
+        listUtylizujButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listUtylizujButtonActionPerformed(evt);
+            }
+        });
+
+        listaSprzedazyButton.setText("Lista Sprzedazy");
+
+        addToSaleButton.setText("Dodaj do koszyka");
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addMedicamentButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(updateStateButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-            .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(findButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(addMedicamentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(updateStateButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(findButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(utylizujButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addZamienikButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listUtylizujButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(findZamienikButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addToSaleButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listaSprzedazyButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,6 +188,18 @@ public class PharmacyFrame extends BaseFrame {
                 .addComponent(updateStateButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(findButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(utylizujButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addZamienikButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(findZamienikButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listUtylizujButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addToSaleButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listaSprzedazyButton)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -171,8 +230,8 @@ public class PharmacyFrame extends BaseFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,12 +266,47 @@ public class PharmacyFrame extends BaseFrame {
         fm.setVisible(true);
     }//GEN-LAST:event_findButtonActionPerformed
 
+    private void utylizujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utylizujButtonActionPerformed
+        // TODO add your handling code here:
+        AddReprocessing ar = new AddReprocessing(this);
+        ar.pack();
+        ar.setVisible(true);
+    }//GEN-LAST:event_utylizujButtonActionPerformed
+
+    private void addZamienikButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addZamienikButtonActionPerformed
+        // TODO add your handling code here:
+        AddEchange ae = new AddEchange(this);
+        ae.pack();
+        ae.setVisible(true);
+    }//GEN-LAST:event_addZamienikButtonActionPerformed
+
+    private void findZamienikButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findZamienikButtonActionPerformed
+        // TODO add your handling code here:
+        FindExchange fe = new FindExchange(this);
+        fe.pack();
+        fe.setVisible(true);
+    }//GEN-LAST:event_findZamienikButtonActionPerformed
+
+    private void listUtylizujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listUtylizujButtonActionPerformed
+        // TODO add your handling code here:
+        FindReprocessing fr = new FindReprocessing(this);
+        fr.pack();
+        fr.setVisible(true);
+        
+    }//GEN-LAST:event_listUtylizujButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMedicamentButton;
+    private javax.swing.JButton addToSaleButton;
+    private javax.swing.JButton addZamienikButton;
     private javax.swing.JButton findButton;
+    private javax.swing.JButton findZamienikButton;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton listUtylizujButton;
+    private javax.swing.JButton listaSprzedazyButton;
     private javax.swing.JButton updateStateButton;
+    private javax.swing.JButton utylizujButton;
     // End of variables declaration//GEN-END:variables
 }

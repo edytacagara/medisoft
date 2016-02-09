@@ -15,7 +15,7 @@ import pl.medisoft.domain.pharmacy.Exchange;
 public interface ExchangeDao {
     
     void addExchange(Exchange exchange);
-    List<Exchange> findAll(String nazwa);
+    List<Exchange> findAll(Long id);
     
     
 }

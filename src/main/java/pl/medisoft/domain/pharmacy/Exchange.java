@@ -35,9 +35,8 @@ public class Exchange implements Serializable {
     @Column(name = "ID")
     private Long id;
    
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "MEDICAMENT_ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    private Medicament medicament;
+    @Column(name = "MEDICAMENT_ID")
+    private Long medicament;
    
     @Column(name = "EXCHANGE_NAME")
     private String exchangeName;
@@ -49,7 +48,7 @@ public class Exchange implements Serializable {
         this.id = id;
     }
 
-    public Exchange(Long id, Medicament medicament, String exchangeName) {
+    public Exchange(Long id, Long medicament, String exchangeName) {
         this.id = id;
         this.medicament = medicament;
         this.exchangeName = exchangeName;
@@ -65,11 +64,11 @@ public class Exchange implements Serializable {
         this.id = id;
     }
 
-    public Medicament getMedicament() {
+    public Long getMedicament() {
         return medicament;
     }
 
-    public void setMedicament(Medicament medicament) {
+    public void setMedicament(Long medicament) {
         this.medicament = medicament;
     }
 

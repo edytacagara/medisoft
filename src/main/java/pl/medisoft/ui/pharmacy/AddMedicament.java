@@ -30,7 +30,7 @@ public class AddMedicament extends BaseFrame {
         super(parent);
         this.parent = parent;
         initComponents();
-        insertButton.setText(messages.get("app.pharmacy.add"));
+        insertButton.setText(messages.get("dodaj"));
         setResizable(false);
     }
 
@@ -55,7 +55,7 @@ public class AddMedicament extends BaseFrame {
 
         jLabel1.setText("Nazwa:");
 
-        jLabel2.setText("Na co:");
+        jLabel2.setText("Wskazanie:");
 
         jLabel3.setText("Pakowanie:");
 
@@ -90,10 +90,10 @@ public class AddMedicament extends BaseFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(75, 75, 75)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nacoInput, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,6 +157,7 @@ public class AddMedicament extends BaseFrame {
         medicament.setPrice(Double.parseDouble(cenaInput.getText()));
         
         medicamentJpa.addMedicament(medicament);
+        JOptionPane.showMessageDialog(this,"Dodano");
         ((BaseFrame) parent).customize();
 
     }//GEN-LAST:event_insertButtonActionPerformed

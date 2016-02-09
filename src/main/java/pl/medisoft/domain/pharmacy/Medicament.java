@@ -127,7 +127,7 @@ public class Medicament implements Serializable {
 
     @Override
     public String toString() {
-        return "pl.medisoft.domain.pharmacy.Medicament[ id=" + id + " ]";
+        return medicamentName;
     }
     
 }
