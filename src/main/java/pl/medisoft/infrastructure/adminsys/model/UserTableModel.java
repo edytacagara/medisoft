@@ -5,10 +5,13 @@
  */
 package pl.medisoft.infrastructure.adminsys.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import pl.medisoft.application.message.Messages;
 import pl.medisoft.domain.user.User;
+import pl.medisoft.infrastructure.user.UserDao;
+import pl.medisoft.infrastructure.adminsys.model.modelinterface.UserSaveInterface;
 
 /**
  *
@@ -25,9 +28,17 @@ public class UserTableModel extends AbstractTableModel {
     private final List<User> usersList;
 
     private Messages messages;
+    
+    private List<Integer> changedIndex = new ArrayList<>();
+    
+    private UserDao userDao;
+    
+    private UserSaveInterface saveInterface;
 
-    public UserTableModel(List<User> usersList) {
+    public UserTableModel(List<User> usersList,UserDao userDao,UserSaveInterface saveInterface) {
+        this.saveInterface = saveInterface;
         this.usersList = usersList;
+        this.userDao = userDao;
         this.messages = Messages.getInstace();
         this.initializeData();
         this.initializeColumns();
@@ -66,4 +77,33 @@ public class UserTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         return this.values[rowIndex][columnIndex];
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if(!this.values[rowIndex][columnIndex].equals(aValue.toString())) {
+            this.values[rowIndex][columnIndex] = aValue.toString();
+            this.changedIndex.add(rowIndex);
+            this.saveInterface.buttonActrive();
+        }
+
+    }
+    
+    public void saveData(){
+        for(int i : this.changedIndex){
+            User user = this.usersList.get(i);
+            user = UserModelConverter.converRowToUser(this.values[i], user);
+            this.userDao.updateUser(user);
+        }
+        this.changedIndex.clear();
+    }
+    
+    
+    
+    
+    
 }

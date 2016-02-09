@@ -7,6 +7,7 @@ package pl.medisoft.infrastructure.adminsys.dao;
 
 import java.util.List;
 import pl.medisoft.domain.user.RoleDef;
+import pl.medisoft.domain.user.User;
 import pl.medisoft.domain.user.UsersRoles;
 
 /**
@@ -19,9 +20,9 @@ public interface UserRoleDao {
     
     public List<RoleDef> getAvailableRolesByUserId(long userId);
     
-    public void removeRole(UsersRoles usersRoles);
+    public void removeRole(User user);
     
-    public void addRole(RoleDef roleDef, long userId);
+    public void addRole(User user);
     
     
     

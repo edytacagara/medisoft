@@ -32,8 +32,10 @@ public class SysAdminFrame extends BaseFrame {
     public void customize() {
         RoleEditPane roleEditPane = new RoleEditPane(this.messages);
         AccountModifyiPane accountModifyiPane = new AccountModifyiPane(this.messages);
+        AccountBlockPane accountBlockPane = new AccountBlockPane(this.messages);
         this.jTabbedPane2.addTab("Edycja roli", roleEditPane);
-        this.jTabbedPane2.addTab("Edycja konta", accountModifyiPane);       
+        this.jTabbedPane2.addTab("Edycja konta", accountModifyiPane);
+        this.jTabbedPane2.addTab("Blokowanie użytkowników", accountBlockPane);
     }
 
     private void initComponents() {//GEN-BEGIN:initComponents

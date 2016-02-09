@@ -12,7 +12,6 @@ import pl.medisoft.application.message.Messages;
 import pl.medisoft.domain.identity.Identity;
 import pl.medisoft.domain.user.RoleDef;
 import pl.medisoft.domain.user.User;
-import pl.medisoft.domain.user.UsersRoles;
 import pl.medisoft.infrastructure.adminsys.dao.UserRoleDaoFactory;
 import pl.medisoft.infrastructure.adminsys.dao.UserRoleDao;
 import pl.medisoft.infrastructure.user.UserDao;
@@ -27,8 +26,9 @@ public class RoleEditPane extends javax.swing.JPanel {
     private Identity user = IdentityProvider.identity;
     private Messages messages;
     private List<RoleDef> availableRole;
-    private List<UsersRoles> usersRoles;
+    private List<RoleDef> usersRoles;
     private List<User> users;
+    private User selectedUser;
     private UserRoleDao userRoleDao = UserRoleDaoFactory.getUserRoleDao();
     private UserDao userDao = new UserDaoJpa();
     private int selectedToAdd = -1;
@@ -40,15 +40,17 @@ public class RoleEditPane extends javax.swing.JPanel {
     public RoleEditPane(Messages messages) {
         this.messages = messages;
         initComponents();
-        this.getData(this.user.getId());
+        this.getData();
         this.setDataToComponents();
         this.setButtonVIsible();
     }
 
-    private void getData(long userId) {
-        this.availableRole = this.userRoleDao.getAvailableRolesByUserId(userId);
-        this.usersRoles = this.userRoleDao.getUserRoleByUserId(userId);
+    private void getData() {
         this.users = this.userDao.findAll();
+        this.selectedUser = this.users.get(0);
+        this.availableRole = this.userRoleDao.getAvailableRolesByUserId(this.selectedUser.getId());
+        this.usersRoles = this.selectedUser.getUserRoles();
+        
     }
 
     private void setDataToComponents() {
@@ -85,7 +87,7 @@ public class RoleEditPane extends javax.swing.JPanel {
 
     private void refreshDataForUsers(User user) {
         this.clearComponents();
-        this.usersRoles = this.userRoleDao.getUserRoleByUserId(user.getId());
+        this.usersRoles = user.getUserRoles();
         this.availableRole = this.userRoleDao.getAvailableRolesByUserId(user.getId());
         this.addDataToList(this.roleToAdd, this.availableRole);
         this.addDataToList(this.roleToRemove, this.usersRoles);
@@ -258,13 +260,15 @@ public class RoleEditPane extends javax.swing.JPanel {
     private void addRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoleButtonActionPerformed
         RoleDef roleDef = this.availableRole.get(this.selectedToAdd);
         this.selectedToAdd = -1;
-        this.userRoleDao.addRole(roleDef, ((User)this.usersComboBox.getSelectedItem()).getId());
-        this.refreshDataForUsers((User)this.usersComboBox.getSelectedItem());
+        this.selectedUser.getUserRoles().add(roleDef);
+        this.userDao.updateUser(this.selectedUser);
+        this.refreshDataForUsers(this.selectedUser);
         
     }//GEN-LAST:event_addRoleButtonActionPerformed
 
     private void usersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersComboBoxActionPerformed
-        this.refreshDataForUsers((User) ((JComboBox) evt.getSource()).getSelectedItem());
+        this.selectedUser = (User) ((JComboBox) evt.getSource()).getSelectedItem();
+        this.refreshDataForUsers(this.selectedUser);
     }//GEN-LAST:event_usersComboBoxActionPerformed
 
     private void roleToRemoveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_roleToRemoveItemStateChanged
@@ -286,10 +290,10 @@ public class RoleEditPane extends javax.swing.JPanel {
     }//GEN-LAST:event_roleToAddItemStateChanged
 
     private void removeRoleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRoleButtonActionPerformed
-        UsersRoles usersRoles = this.usersRoles.get(this.selectedToRemove);
+        this.selectedUser.getUserRoles().remove(this.selectedToRemove);
         this.selectedToRemove = -1;
-        this.userRoleDao.removeRole(usersRoles);
-        this.refreshDataForUsers((User)this.usersComboBox.getSelectedItem());
+        this.userDao.updateUser(this.selectedUser);
+        this.refreshDataForUsers(this.selectedUser);
     }//GEN-LAST:event_removeRoleButtonActionPerformed
 
 

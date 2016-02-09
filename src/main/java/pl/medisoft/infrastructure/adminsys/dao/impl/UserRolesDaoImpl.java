@@ -8,6 +8,7 @@ package pl.medisoft.infrastructure.adminsys.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 import pl.medisoft.domain.user.RoleDef;
+import pl.medisoft.domain.user.User;
 import pl.medisoft.domain.user.UsersRoles;
 import pl.medisoft.infrastructure.BasicDaoJpa;
 import pl.medisoft.infrastructure.adminsys.dao.UserRoleDao;
@@ -33,17 +34,16 @@ public class UserRolesDaoImpl extends BasicDaoJpa implements UserRoleDao{
     }
 
     @Override
-    public void removeRole(UsersRoles usersRoles) {
+    public void removeRole(User user) {
         this.getEntityManager().getTransaction().begin();
-        this.getEntityManager().remove(usersRoles);
+        this.getEntityManager().persist(user);
         this.getEntityManager().getTransaction().commit();
     }
 
     @Override
-    public void addRole(RoleDef roleDef, long userId) {
-        UsersRoles usersRoles = new UsersRoles(userId, roleDef.getId());
+    public void addRole(User user) {
         this.getEntityManager().getTransaction().begin();
-        this.getEntityManager().persist(usersRoles);
+        this.getEntityManager().persist(user);
         this.getEntityManager().getTransaction().commit();
     }   
 }

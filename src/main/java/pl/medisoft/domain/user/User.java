@@ -46,6 +46,7 @@ public class User implements Serializable {
     private String postalCode;
     private String street;
     private String houseNumber;
+    private int isLock;
     private List<RuleDef> userRules;
     private List<ParamDef> userParams;
     private List<RoleDef> userRoles;
@@ -176,6 +177,15 @@ public class User implements Serializable {
 
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
+    }
+    
+    @Column(name = "IS_LOCK")
+    public int getIsLock(){
+        return this.isLock;
+    }
+    
+    public void setIsLock(int isLock){
+        this.isLock = isLock;
     }
 
     @ManyToMany
