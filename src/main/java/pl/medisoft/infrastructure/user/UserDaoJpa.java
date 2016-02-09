@@ -23,7 +23,8 @@ public class UserDaoJpa extends BasicDaoJpa implements UserDao {
     private static final String FIND_BY_PESEL = "select user from User user where user.pesel = :pesel";
     private static final String FIND_BY_USERNAME_PASSHASH = "select user from User user "
             + " where user.username = :username "
-            + " and user.passhash = :passhash ";
+            + " and user.passhash = :passhash "
+            + " and user.isLock = 0 ";
 
     @Override
     public User findById(Long id) {

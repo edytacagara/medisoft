@@ -5,6 +5,7 @@
  */
 package pl.medisoft.infrastructure.adminsys.model;
 
+import jdk.nashorn.internal.objects.NativeDate;
 import pl.medisoft.domain.user.User;
 
 /**
@@ -25,6 +26,19 @@ public class UserModelConverter {
         row[7] = user.getHouseNumber() == null ? "" : user.getHouseNumber();
         row[8] = user.getUsername() == null ? "" : user.getUsername();
         return row;
+    }
+    
+    public static User converRowToUser(final String[] row,User user){
+        user.setName(row[0].equals("") ? null : row[0]);
+        user.setSurname(row[1].equals("") ? null : row[1]);
+        user.setEmail(row[2].equals("") ? null : row[2]);
+        user.setCountry(row[3].equals("") ? null : row[3]);
+        user.setCity(row[4].equals("") ? null : row[4]);
+        user.setPostalCode(row[5].equals("") ? null : row[5]);
+        user.setStreet(row[6].equals("") ? null : row[6]);
+        user.setHouseNumber(row[7].equals("") ? null : row[7]);
+        user.setUsername(row[8].equals("") ? null : row[8]);
+        return user;
     }
 
 }
