@@ -7,6 +7,7 @@ package pl.medisoft.infrastructure.pharmacy.medicament;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import pl.medisoft.domain.pharmacy.Medicament;
 import pl.medisoft.domain.user.User;
 import pl.medisoft.infrastructure.BasicDaoJpa;
@@ -19,7 +20,7 @@ import pl.medisoft.infrastructure.BasicDaoJpa;
 public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
 
     private static final String FIND_ALL = "select m from Medicament m";
-    private static final String FIND_BY_NAME = "select m from Medicament m where m.medicamentName = :name";
+    private static final String FIND_BY_NAME = "select m from Medicament m where lower(m.medicamentName) = :name";
     private static final String FIND_NAME = "select m.medicamentName from Medicament m where m.id = :id";
     
     @Override
@@ -42,9 +43,9 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
     @Override
     public boolean updateMedicament(Medicament m) {
         try {
-             this.getEntityManager().getTransaction().begin();
-        this.getEntityManager().merge(m);
-        this.getEntityManager().getTransaction().commit();
+            this.getEntityManager().getTransaction().begin();
+            this.getEntityManager().merge(m);
+            this.getEntityManager().getTransaction().commit();
         return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +62,13 @@ public class MedicamentsDaoJpa extends BasicDaoJpa implements MedicamentsDao{
 
     @Override
     public Medicament findByName(String name) {
-       return (Medicament) getEntityManager().createQuery(FIND_BY_NAME).setParameter("name", name).getSingleResult();
+      try{
+           return (Medicament) getEntityManager().createQuery(FIND_BY_NAME).setParameter("name", name).getSingleResult();
+      }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+      }
+      
     }
     
 }

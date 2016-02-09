@@ -8,7 +8,9 @@ package pl.medisoft.ui.pharmacy;
 import com.sun.net.httpserver.Headers;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 import pl.medisoft.application.configuration.Configuration;
 import pl.medisoft.application.configuration.ModuleEnum;
@@ -30,7 +32,10 @@ public class PharmacyFrame extends BaseFrame {
     private MedicamentsDaoJpa medJpa = new MedicamentsDaoJpa();
     private List<Medicament> listMed;
     private final JFrame parent;
-    private List<Calculation> koszyk;
+    public List<Calculation> koszyk;
+    private Calculation pom;
+    private Medicament m;
+    
     public PharmacyFrame(final JFrame parent) {
         super(parent);
         this.parent = parent;
@@ -46,11 +51,29 @@ public class PharmacyFrame extends BaseFrame {
     public void tworzKoszyk(){
         koszyk = new ArrayList<>();
     }
+            
+    public void addToKoszyk(double ilosc,String nazwa,double price){
+        pom = new Calculation();
+        pom.setName(nazwa);
+        pom.setAmount(ilosc);
+        pom.setPrice(price);
+        pom.setPay(ilosc*price);
+        koszyk.add(pom);
+        
+    }        
+    
+    private void addToCOmbo(JComboBox<Medicament> comboBox, List<Medicament> data){
+        for(Medicament i : data){
+            comboBox.addItem(i);
+        }
+    }
     
     @Override
     public void customize() {
+        
         this.listMed = medJpa.findALL();
-       
+        this.addToCOmbo(this.medicamentComboBox, listMed);
+        
         jTable1.setModel(new AbstractTableModel() {
             @Override
             public int getRowCount() {
@@ -105,6 +128,7 @@ public class PharmacyFrame extends BaseFrame {
         addToSaleButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        medicamentComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -160,8 +184,18 @@ public class PharmacyFrame extends BaseFrame {
         });
 
         listaSprzedazyButton.setText("Lista Sprzedazy");
+        listaSprzedazyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaSprzedazyButtonActionPerformed(evt);
+            }
+        });
 
         addToSaleButton.setText("Dodaj do koszyka");
+        addToSaleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToSaleButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
@@ -200,7 +234,7 @@ public class PharmacyFrame extends BaseFrame {
                 .addComponent(addToSaleButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listaSprzedazyButton)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 35, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -224,21 +258,31 @@ public class PharmacyFrame extends BaseFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        medicamentComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                medicamentComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicamentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jInternalFrame1)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(medicamentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,7 +305,7 @@ public class PharmacyFrame extends BaseFrame {
 
     private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
         // TODO add your handling code here:
-        FindMedicament fm = new FindMedicament(this);
+        FindMedicament fm = new FindMedicament(this,this);
         fm.pack();
         fm.setVisible(true);
     }//GEN-LAST:event_findButtonActionPerformed
@@ -295,6 +339,28 @@ public class PharmacyFrame extends BaseFrame {
         
     }//GEN-LAST:event_listUtylizujButtonActionPerformed
 
+    private void listaSprzedazyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaSprzedazyButtonActionPerformed
+        // TODO add your handling code here:
+        Schooping s = new Schooping(this, this);
+        s.pack();
+        s.setVisible(true);
+    }//GEN-LAST:event_listaSprzedazyButtonActionPerformed
+
+    private void medicamentComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicamentComboBoxActionPerformed
+        // TODO add your handling code here:
+        refreshData((Medicament)((JComboBox)evt.getSource()).getSelectedItem());
+    }//GEN-LAST:event_medicamentComboBoxActionPerformed
+
+    private void addToSaleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSaleButtonActionPerformed
+        // TODO add your handling code here:
+        double pom = Double.parseDouble(JOptionPane.showInputDialog("Podaj ilosc:"));
+        if(pom > m.getAmount()) {
+            JOptionPane.showMessageDialog(this,"Nie posiadamy tyle leku");
+        }else{
+              addToKoszyk(pom, m.getMedicamentName(), m.getPrice());
+        }
+    }//GEN-LAST:event_addToSaleButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMedicamentButton;
     private javax.swing.JButton addToSaleButton;
@@ -306,7 +372,12 @@ public class PharmacyFrame extends BaseFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JButton listUtylizujButton;
     private javax.swing.JButton listaSprzedazyButton;
+    private javax.swing.JComboBox<Medicament> medicamentComboBox;
     private javax.swing.JButton updateStateButton;
     private javax.swing.JButton utylizujButton;
     // End of variables declaration//GEN-END:variables
+
+    private void refreshData(Medicament medicament) {
+        m = medicament;
+    }
 }

@@ -20,8 +20,10 @@ public class FindMedicament extends BaseFrame {
     private MedicamentsDaoJpa medJpa = new MedicamentsDaoJpa();
     private Medicament medicament;
     private final JFrame parent;
-    public FindMedicament(final JFrame parent) {
+    private PharmacyFrame pf;
+    public FindMedicament(final JFrame parent,PharmacyFrame pf) {
         super(parent);
+        this.pf = pf;
         this.parent = parent;
         initComponents();
         jPanel1.setVisible(false);
@@ -63,6 +65,11 @@ public class FindMedicament extends BaseFrame {
         });
 
         jButton2.setText("Dodaj do koszyka");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Nazwa:");
 
@@ -180,7 +187,7 @@ public class FindMedicament extends BaseFrame {
         s = findInput.getText();
         medicament = medJpa.findByName(s);
         if(medicament == null){
-            JOptionPane.showInputDialog("brak leku w bazie lub zla nazwa");
+            JOptionPane.showMessageDialog(this,"Nie posiadamy tego leku");
         }else{
             nazwaLabel.setText(medicament.getMedicamentName());
             wskazanieLabel.setText(medicament.getDisease());
@@ -190,6 +197,17 @@ public class FindMedicament extends BaseFrame {
             jPanel1.setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        double pom = Double.parseDouble(JOptionPane.showInputDialog("Podaj ilosc:"));
+        if(pom > medicament.getAmount()) {
+            JOptionPane.showMessageDialog(this,"Nie posiadamy tyle leku");
+        }else{
+              pf.addToKoszyk(pom, medicament.getMedicamentName(), medicament.getPrice());
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void customize() {
